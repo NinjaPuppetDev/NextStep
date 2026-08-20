@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import dynamic from "next/dynamic";
+import ShoeCanvas from "@/components/ShoeCanvas";
 import {
   Sparkles,
   ArrowRight,
@@ -22,17 +22,6 @@ import {
   PresetColorway,
 } from "@/context/CustomizerContext";
 import { sound } from "@/utils/audio";
-
-// Dynamically import Three.js Canvas to guarantee pure client-side WebGL rendering
-const ShoeCanvas = dynamic(() => import("@/components/ShoeCanvas"), {
-  ssr: false,
-  loading: () => (
-    <div className="canvas-skeleton-loader">
-      <div className="skeleton-spinner" />
-      <span>INITIALIZING THREE.JS WEBGL ENGINE...</span>
-    </div>
-  ),
-});
 
 export default function HomePage() {
   const { applyPreset, setLookbookModalImg } = useCustomizer();
@@ -190,13 +179,13 @@ export default function HomePage() {
         </div>
 
         <div className="lineup-grid">
-          {/* Card 1: Neon Cyber Runner */}
+          {/* Card 1: Lime Cyber Runner */}
           <div className="lineup-card">
             <div className="card-badge">EDITION 01</div>
             <div className="card-image-wrap">
               <Image
-                src="/images/whiteneonshoes.png"
-                alt="Aether Kinetic Neon Runner"
+                src="/images/shoe.jpg"
+                alt="Aether Kinetic Lime Runner"
                 width={500}
                 height={350}
                 className="lineup-img"
@@ -208,11 +197,11 @@ export default function HomePage() {
                 <span className="card-price">$245 USD</span>
               </div>
               <p className="card-desc">
-                High-visibility luminescent lateral wings with multi-density obsidian core.
+                High-visibility electric lime perforated knit with organic Voronoi lattice midsole.
               </p>
               <div className="card-spec-tags">
-                <span>Aeroknit Mesh</span>
-                <span>Luminescent Finish</span>
+                <span>Aeroknit Upper</span>
+                <span>Lattice Midsole</span>
                 <span>US 7 - 13</span>
               </div>
               <Link
@@ -234,7 +223,7 @@ export default function HomePage() {
             <div className="card-badge">EDITION 02</div>
             <div className="card-image-wrap">
               <Image
-                src="/images/shoe.png"
+                src="/images/stealthshoe.jpg"
                 alt="Aether Stealth Void"
                 width={500}
                 height={350}
@@ -247,10 +236,10 @@ export default function HomePage() {
                 <span className="card-price">$230 USD</span>
               </div>
               <p className="card-desc">
-                Light-absorbing matte micro-weave with titanium hardware accents.
+                Light-absorbing matte micro-weave with sculpted dark Voronoi shock dampeners.
               </p>
               <div className="card-spec-tags">
-                <span>Matte Armor</span>
+                <span>Matte Carbon</span>
                 <span>Nitrogen Sole</span>
                 <span>US 7 - 13</span>
               </div>
@@ -268,13 +257,13 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Card 3: Urban Expedition */}
+          {/* Card 3: Glacier White */}
           <div className="lineup-card">
             <div className="card-badge">EDITION 03</div>
             <div className="card-image-wrap">
               <Image
-                src="/images/crouchcityshoes.png"
-                alt="Aether Urban Expedition"
+                src="/images/whiteshoe.jpg"
+                alt="Aether Pure Glacier Runner"
                 width={500}
                 height={350}
                 className="lineup-img"
@@ -282,15 +271,15 @@ export default function HomePage() {
             </div>
             <div className="card-info">
               <div className="card-header">
-                <h3>URBAN EXPEDITION // 03</h3>
+                <h3>GLACIER // NEON CORE</h3>
                 <span className="card-price">$260 USD</span>
               </div>
               <p className="card-desc">
-                All-weather reinforced city runner with high-grip bio-adaptive traction.
+                Pure glacier white breathable upper with vivid neon lateral core accents.
               </p>
               <div className="card-spec-tags">
-                <span>Weatherproof</span>
-                <span>Carbon Shank</span>
+                <span>Glacier White</span>
+                <span>Cellular Mesh</span>
                 <span>US 7 - 13</span>
               </div>
               <Link
@@ -298,7 +287,7 @@ export default function HomePage() {
                 className="card-customize-btn"
                 onClick={() => {
                   sound.playSuccess();
-                  applyPreset(PRESET_COLORWAYS[3]);
+                  applyPreset(PRESET_COLORWAYS[2]);
                 }}
               >
                 <Sparkles size={14} />
@@ -485,25 +474,25 @@ export default function HomePage() {
         </div>
 
         <div className="lookbook-gallery-grid">
-          {/* Item 1: Urban Crouch City */}
+          {/* Item 1: Urban Promenade */}
           <div
             className="gallery-item large"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg("/images/crouchcityshoes.png");
+              setLookbookModalImg("/images/LookbookWide.jpg");
             }}
           >
             <Image
-              src="/images/crouchcityshoes.png"
-              alt="Urban Streetwear Shoot"
+              src="/images/LookbookWide.jpg"
+              alt="Urban Lifestyle Waterfront Shoot"
               width={900}
               height={600}
               className="gallery-img"
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
-                <span className="gallery-tag">LOOKBOOK 01 // TOKYO EXPEDITION</span>
-                <h3>Urban Kinetic Stealth</h3>
+                <span className="gallery-tag">LOOKBOOK 01 // URBAN PROMENADE</span>
+                <h3>Kinetic Lifestyle</h3>
                 <span className="view-link">
                   <Eye size={15} /> Click to Inspect in High-Res
                 </span>
@@ -512,25 +501,25 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Item 2: High Editorial Fashion */}
+          {/* Item 2: Trail & Park Velocity */}
           <div
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg("/images/EditorialImage2.png");
+              setLookbookModalImg("/images/LookbookAthlete.jpg");
             }}
           >
             <Image
-              src="/images/EditorialImage2.png"
-              alt="High Editorial Fashion Shoot"
+              src="/images/LookbookAthlete.jpg"
+              alt="Athlete Park Trail Run"
               width={600}
               height={800}
               className="gallery-img"
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
-                <span className="gallery-tag">LOOKBOOK 02 // STUDIO MINIMAL</span>
-                <h3>Haute Performance</h3>
+                <span className="gallery-tag">LOOKBOOK 02 // TRAIL VELOCITY</span>
+                <h3>Endurance Sprint</h3>
                 <span className="view-link">
                   <Eye size={15} /> View High-Res
                 </span>
@@ -539,25 +528,25 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Item 3: Cover City Hero */}
+          {/* Item 3: Stride Precision */}
           <div
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg("/images/EditorialImage1.png");
+              setLookbookModalImg("/images/LookbookStride.jpg");
             }}
           >
             <Image
-              src="/images/EditorialImage1.png"
-              alt="Cover City Horizon"
+              src="/images/LookbookStride.jpg"
+              alt="Stride Impact Close-Up"
               width={600}
               height={800}
               className="gallery-img"
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
-                <span className="gallery-tag">LOOKBOOK 03 // METROPOLIS</span>
-                <h3>Nocturnal Horizon</h3>
+                <span className="gallery-tag">LOOKBOOK 03 // STRIDE IMPACT</span>
+                <h3>Cellular Cushioning</h3>
                 <span className="view-link">
                   <Eye size={15} /> View High-Res
                 </span>

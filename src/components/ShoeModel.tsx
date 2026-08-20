@@ -4,7 +4,6 @@ import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF, Float, Html } from "@react-three/drei";
-import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import {
   useCustomizer,
   ShoePartId,
@@ -78,6 +77,22 @@ export function getMaterialProps(finish: FinishType, baseHex: string) {
   }
 }
 
+// Map 3D coordinate point to anatomical shoe zone
+function getPartFromPoint(point: THREE.Vector3): ShoePartId {
+  if (point.y < -0.4) return "sole";
+  if (point.y > 0.42 && point.x < 0.05) return "inner";
+  if (
+    point.y > -0.05 &&
+    point.y < 0.48 &&
+    Math.abs(point.z) < 0.26 &&
+    point.x > -0.25
+  ) {
+    return "laces";
+  }
+  if (Math.abs(point.z) > 0.42 && point.y < 0.18) return "accent";
+  return "upper";
+}
+
 // Custom OBJ-derived GLB component with coordinate raycasting
 export function UserObjShoe({
   colors,
@@ -96,46 +111,36 @@ export function UserObjShoe({
   const [hoveredPart, setHoveredPart] = useState<ShoePartId | null>(null);
   const meshRef = useRef<THREE.Mesh>(null);
 
-  // Map 3D coordinate point to anatomical shoe zone
-  const getPartFromPoint = (point: THREE.Vector3): ShoePartId => {
-    if (point.y < -0.4) return "sole";
-    if (point.y > 0.42 && point.x < 0.05) return "inner";
-    if (
-      point.y > -0.05 &&
-      point.y < 0.48 &&
-      Math.abs(point.z) < 0.26 &&
-      point.x > -0.25
-    ) {
-      return "laces";
-    }
-    if (Math.abs(point.z) > 0.42 && point.y < 0.18) return "accent";
-    return "upper";
-  };
+  // Clone scene instance and configure geometry attributes once
+  const clonedScene = React.useMemo(() => {
+    const clone = scene.clone(true);
+    clone.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.geometry) {
+          mesh.geometry.computeVertexNormals();
+          const pos = mesh.geometry.attributes.position;
+          if (pos && !mesh.geometry.attributes.color) {
+            const colorsArray = new Float32Array(pos.count * 3);
+            mesh.geometry.setAttribute("color", new THREE.BufferAttribute(colorsArray, 3));
+          }
+        }
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
+    });
+    return clone;
+  }, [scene]);
 
   // Color mapping & vertex shading
   useEffect(() => {
-    scene.traverse((child) => {
+    clonedScene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh;
-
-        // Weld split seam vertices from OBJ import to prevent zero-normals
-        if (mesh.geometry) {
-          try {
-            const merged = BufferGeometryUtils.mergeVertices(mesh.geometry, 1e-4);
-            mesh.geometry.dispose();
-            mesh.geometry = merged;
-          } catch {
-            // Geometry was already optimized/merged
-          }
-          mesh.geometry.computeVertexNormals();
-        }
-
         const geom = mesh.geometry;
+        if (!geom) return;
         const pos = geom.attributes.position;
         if (!pos) return;
-
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
 
         let colorAttr = geom.attributes.color as THREE.BufferAttribute;
         if (!colorAttr || colorAttr.count !== pos.count) {
@@ -195,7 +200,7 @@ export function UserObjShoe({
           colors[activePart]
         );
 
-        // Uses MeshPhysicalMaterial for clearcoat support
+        // Uses MeshPhysicalMaterial with DoubleSide for clean solid rendering
         const activeBaseColor = new THREE.Color(colors[activePart]);
         mesh.material = new THREE.MeshPhysicalMaterial({
           vertexColors: true,
@@ -209,7 +214,7 @@ export function UserObjShoe({
         });
       }
     });
-  }, [scene, colors, finishes, wireframe, activePart]);
+  }, [clonedScene, colors, finishes, wireframe, activePart]);
 
   const handlePointerMove = (e: {
     stopPropagation: () => void;
@@ -243,7 +248,7 @@ export function UserObjShoe({
     >
       <primitive
         ref={meshRef}
-        object={scene}
+        object={clonedScene}
         onPointerMove={handlePointerMove}
         onPointerOut={handlePointerOut}
         onClick={handleClick}

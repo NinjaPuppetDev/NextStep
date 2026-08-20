@@ -1,22 +1,10 @@
 "use client";
 
 import React from "react";
-import dynamic from "next/dynamic";
+import ShoeCanvas from "@/components/ShoeCanvas";
 import CustomizerUI from "@/components/CustomizerUI";
 import { Sparkles, Info } from "lucide-react";
 import { useCustomizer } from "@/context/CustomizerContext";
-
-// Client-only dynamic import of the 3D Three.js Canvas
-const ShoeCanvas = dynamic(() => import("@/components/ShoeCanvas"), {
-  ssr: false,
-  loading: () => (
-    <div className="store-canvas-loader">
-      <div className="skeleton-spinner" />
-      <span className="loader-title">INITIALIZING 3D WEBGL ATELIER...</span>
-      <span className="loader-sub">Compiling PBR Shaders & Geometry Matrices</span>
-    </div>
-  ),
-});
 
 export default function StorePage() {
   const { highContrast } = useCustomizer();

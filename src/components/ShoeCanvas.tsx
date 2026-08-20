@@ -139,6 +139,8 @@ function SnapshotCapturer({ trigger }: { trigger: number }) {
   return null;
 }
 
+const emptySubscribe = () => () => {};
+
 export default function ShoeCanvas({
   interactive = true,
   className = "",
@@ -149,6 +151,35 @@ export default function ShoeCanvas({
   style?: React.CSSProperties;
 }) {
   const { lighting, cameraAngle, snapshotTrigger, highContrast } = useCustomizer();
+  const mounted = React.useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+
+  if (!mounted) {
+    return (
+      <div
+        className={`shoe-canvas-wrapper ${highContrast ? "high-contrast-canvas" : ""} ${className}`}
+        style={{
+          width: "100%",
+          height: "100%",
+          minHeight: "350px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: highContrast ? "#E5E7EB" : "transparent",
+          ...style,
+        }}
+      >
+        <div className="skeleton-spinner" />
+        <span style={{ fontSize: "11px", fontWeight: 700, letterSpacing: "0.15em", color: "#64748b", marginTop: "14px" }}>
+          INITIALIZING 3D WEBGL ATELIER...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -164,22 +195,22 @@ export default function ShoeCanvas({
       }}
     >
       <Canvas
-          shadows={false}
-          gl={{
-            powerPreference: "high-performance",
-            preserveDrawingBuffer: true, // Retained for 4K capture
-            antialias: true,
-            toneMapping: THREE.ACESFilmicToneMapping,
-            toneMappingExposure: highContrast ? 1.05 : 1.15,
-          }}
-          camera={{ position: [3.0, 1.6, 3.5], fov: 42 }}
-          onCreated={({ gl }) => {
-            const handleContextLost = (e: Event) => {
-              e.preventDefault();
-            };
-            gl.domElement.addEventListener("webglcontextlost", handleContextLost, false);
-          }}
-        >
+        shadows={false}
+        gl={{
+          powerPreference: "high-performance",
+          preserveDrawingBuffer: true, // Retained for 4K capture
+          antialias: true,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: highContrast ? 1.05 : 1.15,
+        }}
+        camera={{ position: [3.0, 1.6, 3.5], fov: 42 }}
+        onCreated={({ gl }) => {
+          const handleContextLost = (e: Event) => {
+            e.preventDefault();
+          };
+          gl.domElement.addEventListener("webglcontextlost", handleContextLost, false);
+        }}
+      >
         <Suspense fallback={null}>
           {highContrast && <color attach="background" args={["#E5E7EB"]} />}
           <LightingRig preset={lighting} />
