@@ -171,27 +171,27 @@ export default function Navbar() {
                 <Sparkles size={16} />
                 <span>3D Customizer Studio</span>
               </Link>
-              <a
+              <Link
                 href="/#lookbook"
                 onClick={() => setMobileMenuOpen(false)}
                 className="mobile-nav-link"
               >
                 Editorial Lookbook
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/#technology"
                 onClick={() => setMobileMenuOpen(false)}
                 className="mobile-nav-link"
               >
                 Materials & Tech Lab
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/#manifesto"
                 onClick={() => setMobileMenuOpen(false)}
                 className="mobile-nav-link"
               >
                 Brand Manifesto
-              </a>
+              </Link>
             </nav>
             <div className="mobile-menu-footer">
               <Link

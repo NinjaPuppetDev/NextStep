@@ -116,7 +116,7 @@ export function UserObjShoe({
   useEffect(() => {
     scene.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
-        let mesh = child as THREE.Mesh;
+        const mesh = child as THREE.Mesh;
 
         // Weld split seam vertices from OBJ import to prevent zero-normals
         if (mesh.geometry) {

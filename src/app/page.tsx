@@ -15,7 +15,6 @@ import {
   CheckCircle,
   Sliders,
   Maximize2,
-  Share2,
 } from "lucide-react";
 import {
   useCustomizer,
@@ -36,7 +35,7 @@ const ShoeCanvas = dynamic(() => import("@/components/ShoeCanvas"), {
 });
 
 export default function HomePage() {
-  const { applyPreset, setLookbookModalImg, highContrast } = useCustomizer();
+  const { applyPreset, setLookbookModalImg } = useCustomizer();
   const [selectedHeroPreset, setSelectedHeroPreset] = useState(PRESET_COLORWAYS[0]);
   const [activeTechTab, setActiveTechTab] = useState<"cushion" | "upper" | "plate" | "tread">("cushion");
 

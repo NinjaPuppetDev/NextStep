@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { sound } from "@/utils/audio";
 
 export type ShoePartId =
@@ -297,35 +297,67 @@ interface CustomizerContextType {
   triggerSnapshot: () => void;
 }
 
+function getInitialUrlConfig(): Partial<{
+  colors: ShoeColors;
+  finishes: ShoeFinishes;
+  size: string;
+  engraving: string;
+}> {
+  if (typeof window !== "undefined") {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const encoded = params.get("custom");
+      if (encoded) {
+        return JSON.parse(decodeURIComponent(encoded));
+      }
+    } catch {
+      // Ignore
+    }
+  }
+  return {};
+}
+
 const CustomizerContext = createContext<CustomizerContextType | undefined>(undefined);
 
 export const CustomizerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [activePart, setActivePart] = useState<ShoePartId>("upper");
-  const [colors, setColors] = useState<ShoeColors>({
-    upper: "#2D3238",
-    sole: "#2D3238",
-    outsole: "#2D3238",
-    laces: "#39ff14",
-    accent: "#39ff14",
-    inner: "#2D3238",
-    tongue: "#2D3238",
-    hardware: "#c8ff00",
+  const [colors, setColors] = useState<ShoeColors>(() => {
+    const urlConfig = getInitialUrlConfig();
+    return urlConfig.colors || {
+      upper: "#2D3238",
+      sole: "#2D3238",
+      outsole: "#2D3238",
+      laces: "#39ff14",
+      accent: "#39ff14",
+      inner: "#2D3238",
+      tongue: "#2D3238",
+      hardware: "#c8ff00",
+    };
   });
 
-  const [finishes, setFinishes] = useState<ShoeFinishes>({
-    upper: "matte",
-    sole: "matte",
-    outsole: "matte",
-    laces: "matte",
-    accent: "luminescent",
-    inner: "matte",
-    tongue: "matte",
-    hardware: "metallic",
+  const [finishes, setFinishes] = useState<ShoeFinishes>(() => {
+    const urlConfig = getInitialUrlConfig();
+    return urlConfig.finishes || {
+      upper: "matte",
+      sole: "matte",
+      outsole: "matte",
+      laces: "matte",
+      accent: "luminescent",
+      inner: "matte",
+      tongue: "matte",
+      hardware: "metallic",
+    };
   });
 
   const [modelType, setModelType] = useState<"shoe_obj" | "modular_sneaker" | "custom_upload">("modular_sneaker");
-  const [engraving, setEngraving] = useState<string>("");
-  const [selectedSize, setSelectedSize] = useState<string>("US 10.5");
+  const [engraving, setEngraving] = useState<string>(() => {
+    const urlConfig = getInitialUrlConfig();
+    return urlConfig.engraving || "";
+  });
+  const [selectedSize, setSelectedSize] = useState<string>(() => {
+    const urlConfig = getInitialUrlConfig();
+    return urlConfig.size || "US 10.5";
+  });
   const [lighting, setLighting] = useState<LightingPreset>("studio");
   const [cameraAngle, setCameraAngle] = useState<CameraAngle>("isometric");
   const [autoRotate, setAutoRotate] = useState<boolean>(true);
@@ -455,25 +487,6 @@ export const CustomizerProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  // Read URL query params on initial mount for shareable shoe builds
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const encoded = params.get("custom");
-      if (encoded) {
-        try {
-          const parsed = JSON.parse(decodeURIComponent(encoded));
-          if (parsed.colors) setColors(parsed.colors);
-          if (parsed.finishes) setFinishes(parsed.finishes);
-          if (parsed.size) setSelectedSize(parsed.size);
-          if (parsed.engraving) setEngraving(parsed.engraving);
-        } catch {
-          // Ignore parse errors
-        }
-      }
-    }
-  }, []);
 
   return (
     <CustomizerContext.Provider
