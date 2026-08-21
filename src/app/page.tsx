@@ -4,6 +4,11 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ShoeCanvas from "@/components/ShoeCanvas";
+import SafeImage, {
+  LOCAL_LOOKBOOK_FALLBACKS,
+  LOCAL_COLLECTION_FALLBACKS,
+  resolveValidSrc,
+} from "@/components/SafeImage";
 import {
   Sparkles,
   ArrowRight,
@@ -23,21 +28,6 @@ import {
 } from "@/context/CustomizerContext";
 import { useCMS } from "@/context/CMSContext";
 import { sound } from "@/utils/audio";
-
-// Safe helper to guarantee image URLs always resolve to a valid path
-function resolveSafeImageUrl(url: string | undefined, fallback: string): string {
-  if (!url || typeof url !== "string" || url.trim() === "") {
-    return fallback;
-  }
-  // If legacy path or missing file name, map to the updated assets
-  if (url === "/images/shoe.jpg" || url === "/images/shoe.png") return "/images/cyber_volt_shoe.jpg";
-  if (url === "/images/stealthshoe.jpg") return "/images/stealth_onyx_shoe.jpg";
-  if (url === "/images/whiteshoe.jpg" || url === "/images/whiteneonshoes.jpg") return "/images/glacier_neon_shoe.jpg";
-  if (url === "/images/LookbookWide.jpg") return "/images/editorial_cyber_volt.jpg";
-  if (url === "/images/LookbookAthlete.jpg") return "/images/editorial_stealth_onyx.jpg";
-  if (url === "/images/LookbookStride.jpg") return "/images/editorial_glacier_neon.jpg";
-  return url;
-}
 
 export default function HomePage() {
   const { applyPreset, setLookbookModalImg } = useCustomizer();
@@ -206,17 +196,15 @@ export default function HomePage() {
           <div className="lineup-card">
             <div className="card-badge">EDITION 01</div>
             <div className="card-image-wrap">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={resolveSafeImageUrl(edition01.url, "/images/cyber_volt_shoe.jpg")}
+              <SafeImage
+                src={edition01.url}
+                fallbackKey="edition-01"
+                fallbackMap={LOCAL_COLLECTION_FALLBACKS}
                 alt={edition01.alt || "Edition 01 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = "/images/cyber_volt_shoe.jpg";
-                }}
               />
             </div>
             <div className="card-info">
@@ -250,17 +238,15 @@ export default function HomePage() {
           <div className="lineup-card">
             <div className="card-badge">EDITION 02</div>
             <div className="card-image-wrap">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={resolveSafeImageUrl(edition02.url, "/images/stealth_onyx_shoe.jpg")}
+              <SafeImage
+                src={edition02.url}
+                fallbackKey="edition-02"
+                fallbackMap={LOCAL_COLLECTION_FALLBACKS}
                 alt={edition02.alt || "Edition 02 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = "/images/stealth_onyx_shoe.jpg";
-                }}
               />
             </div>
             <div className="card-info">
@@ -294,17 +280,15 @@ export default function HomePage() {
           <div className="lineup-card">
             <div className="card-badge">EDITION 03</div>
             <div className="card-image-wrap">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={resolveSafeImageUrl(edition03.url, "/images/glacier_neon_shoe.jpg")}
+              <SafeImage
+                src={edition03.url}
+                fallbackKey="edition-03"
+                fallbackMap={LOCAL_COLLECTION_FALLBACKS}
                 alt={edition03.alt || "Edition 03 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = "/images/glacier_neon_shoe.jpg";
-                }}
               />
             </div>
             <div className="card-info">
@@ -517,20 +501,18 @@ export default function HomePage() {
             className="gallery-item large"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg(resolveSafeImageUrl(lookbook01.url, "/images/editorial_cyber_volt.jpg"));
+              setLookbookModalImg(resolveValidSrc(lookbook01.url, "lookbook-01", LOCAL_LOOKBOOK_FALLBACKS));
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={resolveSafeImageUrl(lookbook01.url, "/images/editorial_cyber_volt.jpg")}
+            <SafeImage
+              src={lookbook01.url}
+              fallbackKey="lookbook-01"
+              fallbackMap={LOCAL_LOOKBOOK_FALLBACKS}
               alt={lookbook01.alt || "Lookbook 01 Shoot"}
               width={900}
               height={600}
               className="gallery-img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "/images/editorial_cyber_volt.jpg";
-              }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
@@ -549,20 +531,18 @@ export default function HomePage() {
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg(resolveSafeImageUrl(lookbook02.url, "/images/editorial_stealth_onyx.jpg"));
+              setLookbookModalImg(resolveValidSrc(lookbook02.url, "lookbook-02", LOCAL_LOOKBOOK_FALLBACKS));
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={resolveSafeImageUrl(lookbook02.url, "/images/editorial_stealth_onyx.jpg")}
+            <SafeImage
+              src={lookbook02.url}
+              fallbackKey="lookbook-02"
+              fallbackMap={LOCAL_LOOKBOOK_FALLBACKS}
               alt={lookbook02.alt || "Lookbook 02 Shoot"}
               width={600}
               height={800}
               className="gallery-img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "/images/editorial_stealth_onyx.jpg";
-              }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
@@ -581,20 +561,18 @@ export default function HomePage() {
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg(resolveSafeImageUrl(lookbook03.url, "/images/editorial_glacier_neon.jpg"));
+              setLookbookModalImg(resolveValidSrc(lookbook03.url, "lookbook-03", LOCAL_LOOKBOOK_FALLBACKS));
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={resolveSafeImageUrl(lookbook03.url, "/images/editorial_glacier_neon.jpg")}
+            <SafeImage
+              src={lookbook03.url}
+              fallbackKey="lookbook-03"
+              fallbackMap={LOCAL_LOOKBOOK_FALLBACKS}
               alt={lookbook03.alt || "Lookbook 03 Shoot"}
               width={600}
               height={800}
               className="gallery-img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
-              onError={(e) => {
-                (e.currentTarget as HTMLImageElement).src = "/images/editorial_glacier_neon.jpg";
-              }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">

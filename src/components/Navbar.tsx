@@ -47,6 +47,9 @@ export default function Navbar() {
               width={130}
               height={32}
               style={{ objectFit: "contain", height: "30px", width: "auto" }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/images/NextStepLogo.png";
+              }}
             />
             <div className="live-drop-tag">
               <span className="pulse-dot" />
@@ -180,6 +183,9 @@ export default function Navbar() {
                 width={110}
                 height={28}
                 style={{ objectFit: "contain", height: "26px", width: "auto" }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/images/NextStepLogo.png";
+                }}
               />
               <button
                 className="mobile-close-btn"
