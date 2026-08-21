@@ -104,8 +104,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAuthError(null);
       return loggedUser;
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Google authentication failed';
-      console.error('[AUTH ERROR]', message);
+      let message = 'Google authentication failed';
+      if (err && typeof err === 'object') {
+        const fbErr = err as { code?: string; message?: string };
+        if (fbErr.code === 'auth/unauthorized-domain' || fbErr.message?.includes('unauthorized-domain')) {
+          const currentHost = typeof window !== 'undefined' ? window.location.hostname : 'your current domain';
+          message = `Firebase: auth/unauthorized-domain. The current domain (${currentHost}) must be added to Authorized Domains in your Firebase Authentication Console.`;
+        } else if (fbErr.message) {
+          message = fbErr.message;
+        }
+      } else if (err instanceof Error) {
+        message = err.message;
+      }
+      console.error('[AUTH ERROR]', err);
       setAuthError(message);
       throw err;
     } finally {

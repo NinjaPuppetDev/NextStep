@@ -15,5 +15,5 @@ googleProvider.setCustomParameters({
   prompt: 'select_account',
 });
 
-export { app };
+export { app, firebaseConfig };
 

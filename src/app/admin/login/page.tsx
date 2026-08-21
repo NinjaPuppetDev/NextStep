@@ -14,8 +14,12 @@ import {
   Sliders,
   Sparkles,
   AlertCircle,
+  Copy,
+  Check,
+  ExternalLink,
 } from 'lucide-react';
 import { sound } from '@/utils/audio';
+import { firebaseConfig } from '@/lib/firebase';
 
 export default function AdminLoginPage() {
   const {
@@ -31,6 +35,20 @@ export default function AdminLoginPage() {
   const { setIsCMSOpen } = useCMS();
   const router = useRouter();
   const [signingIn, setSigningIn] = useState(false);
+  const [copiedDomain, setCopiedDomain] = useState(false);
+
+  const currentHostname = typeof window !== 'undefined' ? window.location.hostname : '';
+  const isUnauthorizedDomain = authError?.toLowerCase().includes('unauthorized-domain');
+  const firebaseSettingsUrl = `https://console.firebase.google.com/project/${firebaseConfig.projectId}/authentication/settings`;
+
+  const copyDomain = () => {
+    if (typeof window !== 'undefined' && currentHostname) {
+      navigator.clipboard.writeText(currentHostname);
+      setCopiedDomain(true);
+      sound.playClick(800, 0.02);
+      setTimeout(() => setCopiedDomain(false), 2500);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     sound.playClick(700, 0.03);
@@ -83,10 +101,46 @@ export default function AdminLoginPage() {
         {/* Error / Unauthorized Warning Banner */}
         {authError && (
           <div className="admin-error-banner">
-            <ShieldAlert size={20} className="shrink-0" />
-            <div className="error-copy">
+            <ShieldAlert size={20} className="shrink-0 mt-0.5" />
+            <div className="error-copy flex-1">
               <strong>Authentication Rejected</strong>
               <p>{authError}</p>
+
+              {isUnauthorizedDomain && (
+                <div className="unauthorized-domain-guide mt-3 pt-3 border-t border-red-500/20">
+                  <span className="text-xs font-semibold text-white/90 uppercase tracking-wider block mb-1.5">
+                    Quick Fix: Authorize Domain in Firebase
+                  </span>
+                  <p className="text-xs text-white/70 mb-2.5">
+                    Firebase blocks OAuth popups until the current domain is registered in Authorized Domains.
+                  </p>
+                  
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <code className="bg-black/50 text-lime-400 px-2.5 py-1 rounded text-xs font-mono border border-lime-500/30 break-all">
+                      {currentHostname || 'Loading domain...'}
+                    </code>
+                    <button
+                      type="button"
+                      onClick={copyDomain}
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white rounded text-xs transition-colors"
+                      title="Copy domain to clipboard"
+                    >
+                      {copiedDomain ? <Check size={13} className="text-lime-400" /> : <Copy size={13} />}
+                      <span>{copiedDomain ? 'Copied' : 'Copy Domain'}</span>
+                    </button>
+                  </div>
+
+                  <a
+                    href={firebaseSettingsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs text-lime-400 hover:text-lime-300 underline font-medium"
+                  >
+                    <span>Open Firebase Auth Settings &rarr; Authorized Domains</span>
+                    <ExternalLink size={12} />
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         )}
