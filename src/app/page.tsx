@@ -35,12 +35,13 @@ export default function HomePage() {
   const [selectedHeroPreset, setSelectedHeroPreset] = useState(PRESET_COLORWAYS[0]);
   const [activeTechTab, setActiveTechTab] = useState<"cushion" | "upper" | "plate" | "tread">("cushion");
 
-  const edition01 = getSlot("edition_01");
-  const edition02 = getSlot("edition_02");
-  const edition03 = getSlot("edition_03");
-  const lookbook01 = getSlot("lookbook_01");
-  const lookbook02 = getSlot("lookbook_02");
-  const lookbook03 = getSlot("lookbook_03");
+  const edition01 = { ...getSlot("edition_01"), url: "/images/image1.png" };
+  const edition02 = { ...getSlot("edition_02"), url: "/images/image2.png" };
+  const edition03 = { ...getSlot("edition_03"), url: "/images/image3.png" };
+
+  const lookbook01 = { ...getSlot("lookbook_01"), url: "/images/editorial1.png" };
+  const lookbook02 = { ...getSlot("lookbook_02"), url: "/images/editorial2.png" };
+  const lookbook03 = { ...getSlot("lookbook_03"), url: "/images/editorial3.png" };
 
   const handleHeroColorway = (preset: PresetColorway) => {
     sound.playSelect();
