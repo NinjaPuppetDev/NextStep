@@ -44,11 +44,14 @@ export default function CMSManagerView({ isModal = false, onClose }: CMSManagerV
     mediaLibrary,
     activeTab,
     selectedSlotId,
+    syncStatus,
+    syncErrorMessage,
     setActiveTab,
     setSelectedSlotId,
     updateSlot,
     resetSlot,
     resetAllSlots,
+    syncAllToFirestore,
     uploadImageFile,
     upload3DModel,
     saveAssetToLibrary,
@@ -345,6 +348,24 @@ export default function CMSManagerView({ isModal = false, onClose }: CMSManagerV
           )}
           <button
             type="button"
+            onClick={async () => {
+              const ok = await syncAllToFirestore();
+              if (ok) {
+                sound?.playSuccess?.();
+                setUploadSuccess('All products & lookbook slots synced live to Firestore!');
+                setTimeout(() => setUploadSuccess(null), 4000);
+              }
+            }}
+            disabled={syncStatus === 'syncing'}
+            className="cms-btn-primary"
+            style={{ padding: '6px 14px', fontSize: '0.75rem', background: '#a3e635', color: '#000' }}
+            title="Sync all current slots into Firestore database"
+          >
+            <Sparkles size={13} />
+            <span>{syncStatus === 'syncing' ? 'Syncing...' : 'Sync All to Firestore'}</span>
+          </button>
+          <button
+            type="button"
             onClick={() => {
               if (confirm('Reset all media slots to original factory defaults?')) {
                 resetAllSlots();
@@ -368,6 +389,18 @@ export default function CMSManagerView({ isModal = false, onClose }: CMSManagerV
           )}
         </div>
       </div>
+
+      {syncErrorMessage && (
+        <div style={{ background: '#251313', border: '1px solid #ef4444', padding: '10px 16px', borderRadius: '8px', margin: '0 24px 12px', color: '#fca5a5', fontSize: '0.78rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <AlertTriangle size={15} color="#ef4444" />
+            <span>{syncErrorMessage}</span>
+          </div>
+          <Link href="/admin/login" style={{ color: '#a3e635', fontWeight: 600, textDecoration: 'underline', whiteSpace: 'nowrap' }}>
+            Go to Admin Login →
+          </Link>
+        </div>
+      )}
 
       {/* Tab Navigation */}
       <div className="cms-nav-bar">

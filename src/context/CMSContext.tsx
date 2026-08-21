@@ -55,7 +55,7 @@ export const DEFAULT_SLOTS: Record<string, CMSSlot> = {
     name: 'Hero Shoe Showcase Image',
     section: 'hero',
     type: 'image',
-    url: '/images/shoe.jpg',
+    url: '/images/cyber_volt_shoe.jpg',
     alt: 'NextStep 3D Printed Shoe',
     title: '3D PRINTED SHOES',
     subtitle: 'Customizable 3D-printed footwear designed around you.',
@@ -86,7 +86,7 @@ export const DEFAULT_SLOTS: Record<string, CMSSlot> = {
     name: 'Edition 01 (Cyber Volt)',
     section: 'collection',
     type: 'image',
-    url: '/images/shoe.jpg',
+    url: '/images/cyber_volt_shoe.jpg',
     alt: 'NextStep Cyber Volt Runner',
     title: 'CYBER // VOLT',
     subtitle: 'Breathable knit upper with flexible 3D-printed lattice cushioning for responsive everyday comfort.',
@@ -97,7 +97,7 @@ export const DEFAULT_SLOTS: Record<string, CMSSlot> = {
     name: 'Edition 02 (Stealth Onyx)',
     section: 'collection',
     type: 'image',
-    url: '/images/stealthshoe.jpg',
+    url: '/images/stealth_onyx_shoe.jpg',
     alt: 'NextStep Stealth Onyx',
     title: 'STEALTH // ONYX',
     subtitle: 'Clean monochromatic matte finish paired with targeted 3D-printed impact support.',
@@ -108,7 +108,7 @@ export const DEFAULT_SLOTS: Record<string, CMSSlot> = {
     name: 'Edition 03 (Glacier Neon)',
     section: 'collection',
     type: 'image',
-    url: '/images/whiteshoe.jpg',
+    url: '/images/glacier_neon_shoe.jpg',
     alt: 'NextStep Glacier Neon Runner',
     title: 'GLACIER // NEON',
     subtitle: 'Crisp white upper accented with neon highlights and an adaptive lattice midsole.',
@@ -116,31 +116,31 @@ export const DEFAULT_SLOTS: Record<string, CMSSlot> = {
   },
   lookbook_01: {
     slotId: 'lookbook_01',
-    name: 'Lookbook 01 (Urban Shoot)',
+    name: 'Lookbook 01 (Cyber Volt)',
     section: 'lookbook',
     type: 'image',
-    url: '/images/LookbookWide.jpg',
-    alt: 'Urban Lifestyle Shoot',
+    url: '/images/editorial_cyber_volt.jpg',
+    alt: 'Cyber Volt Urban Shoot',
     title: 'Street & Urban Flow',
     subtitle: 'LOOKBOOK 01 // EVERYDAY MOTION',
   },
   lookbook_02: {
     slotId: 'lookbook_02',
-    name: 'Lookbook 02 (Athlete Trail)',
+    name: 'Lookbook 02 (Stealth Onyx)',
     section: 'lookbook',
     type: 'image',
-    url: '/images/LookbookAthlete.jpg',
-    alt: 'Athlete Trail Run',
+    url: '/images/editorial_stealth_onyx.jpg',
+    alt: 'Stealth Onyx Outdoor Run',
     title: 'Outdoor & Trail Pace',
     subtitle: 'LOOKBOOK 02 // ACTIVE MOVEMENT',
   },
   lookbook_03: {
     slotId: 'lookbook_03',
-    name: 'Lookbook 03 (Stride Close-Up)',
+    name: 'Lookbook 03 (Glacier Neon)',
     section: 'lookbook',
     type: 'image',
-    url: '/images/LookbookStride.jpg',
-    alt: 'Stride Detail Close-Up',
+    url: '/images/editorial_glacier_neon.jpg',
+    alt: 'Glacier Neon Precision Stride',
     title: 'Precision Lattice Structure',
     subtitle: 'LOOKBOOK 03 // DETAIL & CRAFT',
   },
@@ -161,6 +161,8 @@ interface CMSContextType {
   mediaLibrary: MediaAsset[];
   isLoading: boolean;
   isCMSOpen: boolean;
+  syncStatus: 'idle' | 'syncing' | 'synced' | 'error';
+  syncErrorMessage: string | null;
   activeTab: 'slots' | 'library' | 'upload' | '3d-pipeline';
   selectedSlotId: string | null;
   setIsCMSOpen: (open: boolean) => void;
@@ -170,6 +172,7 @@ interface CMSContextType {
   updateSlot: (slotId: string, data: Partial<CMSSlot>) => Promise<void>;
   resetSlot: (slotId: string) => Promise<void>;
   resetAllSlots: () => Promise<void>;
+  syncAllToFirestore: () => Promise<boolean>;
   uploadImageFile: (file: File) => Promise<string>;
   upload3DModel: (
     mainFile: File,
@@ -183,10 +186,28 @@ interface CMSContextType {
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
 
+const LOCAL_STORAGE_KEY = 'nextstep_cms_slots_v2';
+
 export function CMSProvider({ children }: { children: React.ReactNode }) {
-  const [slots, setSlots] = useState<Record<string, CMSSlot>>(DEFAULT_SLOTS);
+  const [slots, setSlots] = useState<Record<string, CMSSlot>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return { ...DEFAULT_SLOTS, ...parsed };
+        }
+      } catch (e) {
+        console.warn('Could not read CMS cache from localStorage:', e);
+      }
+    }
+    return DEFAULT_SLOTS;
+  });
+
   const [mediaLibrary, setMediaLibrary] = useState<MediaAsset[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'synced' | 'error'>('idle');
+  const [syncErrorMessage, setSyncErrorMessage] = useState<string | null>(null);
   const [isCMSOpen, setIsCMSOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'slots' | 'library' | 'upload' | '3d-pipeline'>('slots');
   const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
@@ -211,10 +232,17 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
             }
           });
           setSlots(loadedSlots);
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(loadedSlots));
+            } catch {
+              // ignore storage limit
+            }
+          }
           setIsLoading(false);
         },
         (error) => {
-          console.warn('Firestore CMS slots sync error (using defaults):', error);
+          console.warn('Firestore CMS slots sync error (using local cache / defaults):', error);
           setIsLoading(false);
         }
       );
@@ -256,7 +284,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
           name: slotId,
           section: 'collection',
           type: 'image',
-          url: '/images/shoe.jpg',
+          url: '/images/cyber_volt_shoe.jpg',
           alt: 'NextStep Asset',
           title: 'NextStep Asset',
           subtitle: '',
@@ -269,6 +297,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
   const updateSlot = useCallback(
     async (slotId: string, data: Partial<CMSSlot>) => {
       let updatedSlot: CMSSlot | null = null;
+      let nextSlots: Record<string, CMSSlot> = {};
 
       // Functional state updater prevents reading stale closure variables
       setSlots((prev) => {
@@ -277,7 +306,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
           name: slotId,
           section: 'collection',
           type: 'image',
-          url: '/images/shoe.jpg',
+          url: '/images/cyber_volt_shoe.jpg',
           alt: 'NextStep Shoe',
           title: '',
           subtitle: '',
@@ -290,18 +319,38 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
           updatedAt: new Date().toISOString(),
         };
 
-        return {
+        nextSlots = {
           ...prev,
           [slotId]: updatedSlot,
         };
+
+        return nextSlots;
       });
 
+      // Save to localStorage immediately
+      if (typeof window !== 'undefined' && nextSlots) {
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(nextSlots));
+        } catch {
+          // ignore storage limit
+        }
+      }
+
       if (updatedSlot) {
+        setSyncStatus('syncing');
+        setSyncErrorMessage(null);
         try {
           const docRef = doc(db, 'cms_slots', slotId);
           await setDoc(docRef, updatedSlot, { merge: true });
-        } catch (err) {
-          console.error('Error saving CMS slot to Firestore:', err);
+          setSyncStatus('synced');
+          setTimeout(() => setSyncStatus('idle'), 3000);
+        } catch (err: unknown) {
+          const errMsg = err instanceof Error ? err.message : 'Firestore permission error';
+          console.warn('Error saving CMS slot to Firestore (persisted locally):', err);
+          setSyncStatus('error');
+          setSyncErrorMessage(errMsg.includes('permission') || errMsg.includes('insufficient')
+            ? 'Saved to browser cache. Sign in at /admin to publish live to Firestore.'
+            : errMsg);
         }
       }
     },
@@ -311,27 +360,64 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
   const resetSlot = useCallback(async (slotId: string) => {
     if (DEFAULT_SLOTS[slotId]) {
       const def = DEFAULT_SLOTS[slotId];
-      setSlots((prev) => ({ ...prev, [slotId]: def }));
+      setSlots((prev) => {
+        const next = { ...prev, [slotId]: def };
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(next));
+          } catch {}
+        }
+        return next;
+      });
       try {
         const docRef = doc(db, 'cms_slots', slotId);
         await setDoc(docRef, def);
       } catch (err) {
-        console.error('Error resetting CMS slot in Firestore:', err);
+        console.warn('Error resetting CMS slot in Firestore:', err);
       }
     }
   }, []);
 
   const resetAllSlots = useCallback(async () => {
     setSlots(DEFAULT_SLOTS);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(DEFAULT_SLOTS));
+      } catch {}
+    }
     try {
       for (const [slotId, def] of Object.entries(DEFAULT_SLOTS)) {
         const docRef = doc(db, 'cms_slots', slotId);
         await setDoc(docRef, def);
       }
     } catch (err) {
-      console.error('Error resetting all CMS slots in Firestore:', err);
+      console.warn('Error resetting all CMS slots in Firestore:', err);
     }
   }, []);
+
+  const syncAllToFirestore = useCallback(async (): Promise<boolean> => {
+    setSyncStatus('syncing');
+    setSyncErrorMessage(null);
+    try {
+      for (const [slotId, slotData] of Object.entries(slots)) {
+        const docRef = doc(db, 'cms_slots', slotId);
+        await setDoc(docRef, { ...slotData, updatedAt: new Date().toISOString() }, { merge: true });
+      }
+      setSyncStatus('synced');
+      setTimeout(() => setSyncStatus('idle'), 4000);
+      return true;
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : 'Firestore permission error';
+      console.warn('Error batch syncing slots to Firestore:', err);
+      setSyncStatus('error');
+      setSyncErrorMessage(
+        errMsg.includes('permission') || errMsg.includes('insufficient')
+          ? 'Sign in as site owner at /admin to sync products permanently to Firestore.'
+          : errMsg
+      );
+      return false;
+    }
+  }, [slots]);
 
   const uploadImageFile = useCallback(async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
@@ -454,6 +540,8 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
       mediaLibrary,
       isLoading,
       isCMSOpen,
+      syncStatus,
+      syncErrorMessage,
       activeTab,
       selectedSlotId,
       setIsCMSOpen,
@@ -463,6 +551,7 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
       updateSlot,
       resetSlot,
       resetAllSlots,
+      syncAllToFirestore,
       uploadImageFile,
       upload3DModel,
       saveAssetToLibrary,
@@ -473,12 +562,15 @@ export function CMSProvider({ children }: { children: React.ReactNode }) {
       mediaLibrary,
       isLoading,
       isCMSOpen,
+      syncStatus,
+      syncErrorMessage,
       activeTab,
       selectedSlotId,
       getSlot,
       updateSlot,
       resetSlot,
       resetAllSlots,
+      syncAllToFirestore,
       uploadImageFile,
       upload3DModel,
       saveAssetToLibrary,
