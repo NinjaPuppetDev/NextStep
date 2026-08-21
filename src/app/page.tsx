@@ -24,6 +24,21 @@ import {
 import { useCMS } from "@/context/CMSContext";
 import { sound } from "@/utils/audio";
 
+// Safe helper to guarantee image URLs always resolve to a valid path
+function resolveSafeImageUrl(url: string | undefined, fallback: string): string {
+  if (!url || typeof url !== "string" || url.trim() === "") {
+    return fallback;
+  }
+  // If legacy path or missing file name, map to the updated assets
+  if (url === "/images/shoe.jpg" || url === "/images/shoe.png") return "/images/cyber_volt_shoe.jpg";
+  if (url === "/images/stealthshoe.jpg") return "/images/stealth_onyx_shoe.jpg";
+  if (url === "/images/whiteshoe.jpg" || url === "/images/whiteneonshoes.jpg") return "/images/glacier_neon_shoe.jpg";
+  if (url === "/images/LookbookWide.jpg") return "/images/editorial_cyber_volt.jpg";
+  if (url === "/images/LookbookAthlete.jpg") return "/images/editorial_stealth_onyx.jpg";
+  if (url === "/images/LookbookStride.jpg") return "/images/editorial_glacier_neon.jpg";
+  return url;
+}
+
 export default function HomePage() {
   const { applyPreset, setLookbookModalImg } = useCustomizer();
   const { getSlot } = useCMS();
@@ -193,12 +208,15 @@ export default function HomePage() {
             <div className="card-image-wrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={edition01.url}
+                src={resolveSafeImageUrl(edition01.url, "/images/cyber_volt_shoe.jpg")}
                 alt={edition01.alt || "Edition 01 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/images/cyber_volt_shoe.jpg";
+                }}
               />
             </div>
             <div className="card-info">
@@ -234,12 +252,15 @@ export default function HomePage() {
             <div className="card-image-wrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={edition02.url}
+                src={resolveSafeImageUrl(edition02.url, "/images/stealth_onyx_shoe.jpg")}
                 alt={edition02.alt || "Edition 02 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/images/stealth_onyx_shoe.jpg";
+                }}
               />
             </div>
             <div className="card-info">
@@ -275,12 +296,15 @@ export default function HomePage() {
             <div className="card-image-wrap">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={edition03.url}
+                src={resolveSafeImageUrl(edition03.url, "/images/glacier_neon_shoe.jpg")}
                 alt={edition03.alt || "Edition 03 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/images/glacier_neon_shoe.jpg";
+                }}
               />
             </div>
             <div className="card-info">
@@ -493,17 +517,20 @@ export default function HomePage() {
             className="gallery-item large"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg(lookbook01.url);
+              setLookbookModalImg(resolveSafeImageUrl(lookbook01.url, "/images/editorial_cyber_volt.jpg"));
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={lookbook01.url}
+              src={resolveSafeImageUrl(lookbook01.url, "/images/editorial_cyber_volt.jpg")}
               alt={lookbook01.alt || "Lookbook 01 Shoot"}
               width={900}
               height={600}
               className="gallery-img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/images/editorial_cyber_volt.jpg";
+              }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
@@ -522,17 +549,20 @@ export default function HomePage() {
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg(lookbook02.url);
+              setLookbookModalImg(resolveSafeImageUrl(lookbook02.url, "/images/editorial_stealth_onyx.jpg"));
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={lookbook02.url}
+              src={resolveSafeImageUrl(lookbook02.url, "/images/editorial_stealth_onyx.jpg")}
               alt={lookbook02.alt || "Lookbook 02 Shoot"}
               width={600}
               height={800}
               className="gallery-img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/images/editorial_stealth_onyx.jpg";
+              }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
@@ -551,17 +581,20 @@ export default function HomePage() {
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg(lookbook03.url);
+              setLookbookModalImg(resolveSafeImageUrl(lookbook03.url, "/images/editorial_glacier_neon.jpg"));
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={lookbook03.url}
+              src={resolveSafeImageUrl(lookbook03.url, "/images/editorial_glacier_neon.jpg")}
               alt={lookbook03.alt || "Lookbook 03 Shoot"}
               width={600}
               height={800}
               className="gallery-img"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/images/editorial_glacier_neon.jpg";
+              }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">

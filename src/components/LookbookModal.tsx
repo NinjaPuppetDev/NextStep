@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { useCustomizer } from "@/context/CustomizerContext";
 import { X, Sparkles, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -26,12 +25,17 @@ export default function LookbookModal() {
         </button>
 
         <div className="lookbook-img-wrapper">
-          <Image
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
             src={lookbookModalImg}
             alt="Editorial High-Res Shoot"
             width={1200}
             height={900}
             className="lookbook-full-img"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/images/editorial_cyber_volt.jpg";
+            }}
           />
         </div>
 
