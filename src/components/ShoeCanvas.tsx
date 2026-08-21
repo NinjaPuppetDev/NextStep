@@ -221,11 +221,16 @@ export default function ShoeCanvas({
             <OrbitControls
               enablePan={false}
               enableZoom={true}
+              rotateSpeed={0.8}
               minDistance={2.0}
               maxDistance={7.0}
               minPolarAngle={Math.PI / 6}
               maxPolarAngle={Math.PI / 1.85}
-              dampingFactor={0.05}
+              dampingFactor={0.06}
+              touches={{
+                ONE: THREE.TOUCH.ROTATE,
+                TWO: THREE.TOUCH.DOLLY_PAN,
+              }}
             />
           )}
 

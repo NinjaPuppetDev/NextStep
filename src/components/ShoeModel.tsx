@@ -1,3 +1,4 @@
+// File: src/components/ShoeModel.tsx
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
@@ -12,6 +13,7 @@ import {
   ShoeFinishes,
   PART_NAMES,
 } from "@/context/CustomizerContext";
+import { useCMS } from "@/context/CMSContext";
 
 // Helper to calculate Three.js Material properties based on finish type
 export function getMaterialProps(finish: FinishType, baseHex: string) {
@@ -95,19 +97,21 @@ function getPartFromPoint(point: THREE.Vector3): ShoePartId {
 
 // Custom OBJ-derived GLB component with coordinate raycasting
 export function UserObjShoe({
+  modelUrl = "/models/shoe-from-obj.glb",
   colors,
   finishes,
   wireframe,
   activePart,
   onSelectPart,
 }: {
+  modelUrl?: string;
   colors: ShoeColors;
   finishes: ShoeFinishes;
   wireframe: boolean;
   activePart: ShoePartId;
   onSelectPart: (p: ShoePartId) => void;
 }) {
-  const { scene } = useGLTF("/models/shoe-from-obj.glb");
+  const { scene } = useGLTF(modelUrl);
   const [hoveredPart, setHoveredPart] = useState<ShoePartId | null>(null);
   const meshRef = useRef<THREE.Mesh>(null);
 
@@ -304,6 +308,9 @@ export default function ShoeModel() {
     autoRotate,
   } = useCustomizer();
 
+  const { slots } = useCMS();
+  const activeModelUrl = slots.customizer_shoe_model?.url || "/models/shoe-from-obj.glb";
+
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame((_, delta) => {
@@ -321,6 +328,7 @@ export default function ShoeModel() {
     >
       <group ref={groupRef} dispose={null}>
         <UserObjShoe
+          modelUrl={activeModelUrl}
           colors={colors}
           finishes={finishes}
           wireframe={wireframe}

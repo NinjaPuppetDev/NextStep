@@ -1,0 +1,33 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isVerifiedOwner() {
+      return request.auth != null &&
+        request.auth.token.email_verified == true &&
+        request.auth.token.email.lower() == 'raigoza.david.j@gmail.com';
+    }
+
+    // Public read for 3D GLB models and images, write strictly locked to owner
+    match /models/{allPaths=**} {
+      allow read: if true;
+      allow write: if isVerifiedOwner();
+    }
+
+    match /images/{allPaths=**} {
+      allow read: if true;
+      allow write: if isVerifiedOwner();
+    }
+
+    match /cms/{allPaths=**} {
+      allow read: if true;
+      allow write: if isVerifiedOwner();
+    }
+
+    // Default deny for unclassified paths
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if isVerifiedOwner();
+    }
+  }
+}

@@ -19,11 +19,11 @@ export default function StorePage() {
           <div className="stage-top-info">
             <div className="brand-stage-tag">
               <span className="live-pulse" />
-              <span>NextStep // 3D BESPOKE STUDIO</span>
+              <span>NextStep // 3D CUSTOMIZER STUDIO</span>
             </div>
             <div className="stage-hints">
               <Info size={13} color="#00f0ff" />
-              <span>Left-click + drag to rotate • Scroll to zoom • Click shoe parts to select</span>
+              <span>Left-click + drag to rotate • Scroll to zoom • Click shoe parts to customize</span>
             </div>
           </div>
 
@@ -36,13 +36,13 @@ export default function StorePage() {
           <div className="stage-bottom-specs">
             <div className="spec-bubble">
               <Sparkles size={13} color="#39ff14" />
-              <span>REAL-TIME RAYCASTING ACTIVE</span>
+              <span>INTERACTIVE 3D PREVIEW</span>
             </div>
             <div className="spec-bubble">
-              <span>PHYSICS-BASED PBR SHADERS</span>
+              <span>CUSTOM COLOR & FINISH</span>
             </div>
             <div className="spec-bubble">
-              <span>ZERO-WASTE 3D PRINT READY</span>
+              <span>MADE ON DEMAND</span>
             </div>
           </div>
         </div>

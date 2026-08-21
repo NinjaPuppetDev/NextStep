@@ -25,9 +25,9 @@ export default function Footer() {
       <div className="footer-vip-strip">
         <div className="vip-container">
           <div className="vip-copy">
-            <span className="vip-pill">VIP ALLOCATION ACCESS</span>
-            <h3>Next Drop: Experimental Series // 02</h3>
-            <p>Join the inner circle for early 3D CAD customization releases and limited lab runs.</p>
+            <span className="vip-pill">STAY CONNECTED</span>
+            <h3>Join the Future of Footwear</h3>
+            <p>Be the first to know about new drops, customization features, and exclusive releases.</p>
           </div>
 
           <form onSubmit={handleSubscribe} className="vip-form">
@@ -36,7 +36,7 @@ export default function Footer() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="ENTER ENCRYPTED EMAIL"
+              placeholder="Enter your email address"
               className="vip-input"
             />
             <button type="submit" className="vip-btn">
@@ -47,7 +47,7 @@ export default function Footer() {
                 </>
               ) : (
                 <>
-                  <span>Join List</span>
+                  <span>Join Waitlist</span>
                   <ArrowRight size={15} />
                 </>
               )}
@@ -65,11 +65,11 @@ export default function Footer() {
               <span className="logo-text">NEXTSTEP</span>
             </div>
             <p className="brand-mission">
-              Pioneering additive bespoke footwear through real-time 3D computational design, bio-adaptive polymers, and zero-waste on-demand fabrication.
+              Customizable 3D-printed footwear designed around you and crafted on demand through digital manufacturing.
             </p>
             <div className="status-badge-live">
               <span className="live-dot" />
-              <span>3D CAD ENGINE: ONLINE (THREE.JS / WEBGL 2.0)</span>
+              <span>3D PREVIEW ENGINE: ONLINE</span>
             </div>
           </div>
 
@@ -88,12 +88,12 @@ export default function Footer() {
               </li>
               <li>
                 <a href="#technology" onClick={() => sound.playClick(600, 0.02)}>
-                  Materials & Tech Lab
+                  Technology & Materials
                 </a>
               </li>
               <li>
                 <a href="#manifesto" onClick={() => sound.playClick(600, 0.02)}>
-                  Brand Manifesto
+                  Our Philosophy
                 </a>
               </li>
             </ul>
@@ -104,22 +104,22 @@ export default function Footer() {
             <ul>
               <li>
                 <Link href="/store" onClick={() => sound.playClick(600, 0.02)}>
-                  Nexus-01 Aeroknit
+                  All Products
                 </Link>
               </li>
               <li>
                 <Link href="/store" onClick={() => sound.playClick(600, 0.02)}>
-                  Cyber Runner Pro
+                  Runners
                 </Link>
               </li>
               <li>
                 <Link href="/store" onClick={() => sound.playClick(600, 0.02)}>
-                  Stealth Void Low
+                  Trainers
                 </Link>
               </li>
               <li>
                 <Link href="/store" onClick={() => sound.playClick(600, 0.02)}>
-                  Mars Terra High
+                  Lifestyle
                 </Link>
               </li>
             </ul>
@@ -148,13 +148,13 @@ export default function Footer() {
       {/* Bottom Copyright & System Status */}
       <div className="footer-bottom">
         <div className="footer-bottom-container">
-          <span>© 2026 NEXTSTEP LABS INC. ALL RIGHTS RESERVED.</span>
+          <span>© 2026 NEXTSTEP FOOTWEAR. ALL RIGHTS RESERVED.</span>
           <div className="footer-meta-tags">
-            <span>TERMS OF SPECIFICATION</span>
+            <span>TERMS OF SERVICE</span>
             <span>•</span>
-            <span>PRIVACY PROTOCOL</span>
+            <span>PRIVACY POLICY</span>
             <span>•</span>
-            <span>GLOBAL DISPATCH</span>
+            <span>SHIPPING & RETURNS</span>
           </div>
         </div>
       </div>

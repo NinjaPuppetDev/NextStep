@@ -67,7 +67,7 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
   {
     id: "cyber-volt",
     name: "CYBER VOLT // 01",
-    tagline: "High-visibility fluorescent luminescence on #2D3238 charcoal core",
+    tagline: "High-visibility neon highlights on charcoal core",
     themeColor: "#39ff14",
     price: 245,
     colors: {
@@ -89,7 +89,7 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
   {
     id: "stealth-void",
     name: "STEALTH ONYX // 00",
-    tagline: "Monochromatic #2D3238 charcoal architecture with light-absorbing finish",
+    tagline: "Clean monochromatic matte finish with dark lattice cushioning",
     themeColor: "#2D3238",
     price: 230,
     colors: {
@@ -110,7 +110,7 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
   {
     id: "polar-aurora",
     name: "POLAR AURORA // 02",
-    tagline: "Crisp arctic titanium shell with cyan laser trim",
+    tagline: "Arctic white base with vibrant cyan accents",
     themeColor: "#00f0ff",
     price: 250,
     colors: {
@@ -131,7 +131,7 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
   {
     id: "mars-terra",
     name: "MARS TERRA // 03",
-    tagline: "Oxidized terracotta dunes with volcanic charcoal accents",
+    tagline: "Warm terracotta tones with charcoal detailing",
     themeColor: "#e65100",
     price: 240,
     colors: {
@@ -152,7 +152,7 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
   {
     id: "liquid-chrome",
     name: "TITANIUM CHROME // 04",
-    tagline: "Polished aerospace alloys with ultra-reflective sheen",
+    tagline: "Reflective metallic finish with cool grey accents",
     themeColor: "#94a3b8",
     price: 265,
     colors: {
@@ -173,7 +173,7 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
   {
     id: "crimson-rush",
     name: "CRIMSON VELOCITY // 05",
-    tagline: "High-adrenaline hyper-red with obsidian chassis",
+    tagline: "Vibrant crimson upper with dark contrast sole",
     themeColor: "#e11d48",
     price: 245,
     colors: {
@@ -195,33 +195,33 @@ export const PRESET_COLORWAYS: PresetColorway[] = [
 
 export const PALETTE_SWATCHES = [
   { name: "Charcoal (#2D3238)", hex: "#2D3238" },
-  { name: "Onyx Void", hex: "#111317" },
+  { name: "Onyx Black", hex: "#111317" },
   { name: "Polar White", hex: "#f8fafc" },
   { name: "Cyber Volt", hex: "#39ff14" },
-  { name: "Hyper Cyan", hex: "#00f0ff" },
+  { name: "Cyan", hex: "#00f0ff" },
   { name: "Crimson Red", hex: "#e11d48" },
-  { name: "Solar Orange", hex: "#ff5e00" },
-  { name: "Gold Titanium", hex: "#eab308" },
-  { name: "Ultra Violet", hex: "#8b5cf6" },
-  { name: "Desert Tan", hex: "#c2a688" },
+  { name: "Orange", hex: "#ff5e00" },
+  { name: "Gold", hex: "#eab308" },
+  { name: "Violet", hex: "#8b5cf6" },
+  { name: "Tan", hex: "#c2a688" },
   { name: "Slate Blue", hex: "#3b82f6" },
-  { name: "Emerald Glitch", hex: "#10b981" },
-  { name: "Magma Pink", hex: "#ec4899" },
+  { name: "Emerald", hex: "#10b981" },
+  { name: "Pink", hex: "#ec4899" },
   { name: "Graphite", hex: "#374151" },
   { name: "Cement Grey", hex: "#9ca3af" },
   { name: "Deep Navy", hex: "#0f172a" },
-  { name: "Olive Drab", hex: "#4d5b3d" },
+  { name: "Olive", hex: "#4d5b3d" },
 ];
 
 export const PART_NAMES: Record<ShoePartId, { label: string; desc: string }> = {
-  upper: { label: "Upper Shell", desc: "Aeroknit multi-density engineered weave" },
-  sole: { label: "Midsole Chassis", desc: "Kinetic rebound nitrogen-infused foam" },
-  outsole: { label: "Grip Outsole", desc: "Bio-adaptive traction compound" },
-  laces: { label: "Fast-Lacing Wire", desc: "Kevlar-reinforced tension laces" },
-  accent: { label: "Accent Lateral", desc: "Structural support cage & aerodynamic wing" },
-  inner: { label: "Collar Liner", desc: "Memory-foam sock liner for zero friction" },
-  tongue: { label: "Tongue Gusset", desc: "Breathable ergonomic midfoot gusset" },
-  hardware: { label: "Eyelets & Badges", desc: "Anodized laser-etched hardware" },
+  upper: { label: "Knit Upper", desc: "Breathable engineered knit upper" },
+  sole: { label: "3D Midsole", desc: "Adaptive 3D-printed lattice cushioning" },
+  outsole: { label: "Traction Outsole", desc: "Durable multi-surface rubber compound" },
+  laces: { label: "Laces", desc: "Durable woven laces" },
+  accent: { label: "Side Accent", desc: "Structural lateral overlay" },
+  inner: { label: "Inner Lining", desc: "Padded collar for comfortable all-day fit" },
+  tongue: { label: "Tongue", desc: "Flexible, breathable tongue" },
+  hardware: { label: "Eyelets & Trim", desc: "Reinforced eyelets and metallic details" },
 };
 
 interface CustomizerContextType {

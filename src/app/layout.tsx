@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { CustomizerProvider } from "@/context/CustomizerContext";
+import { CMSProvider } from "@/context/CMSContext";
+import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import CartDrawer from "@/components/CartDrawer";
 import CheckoutModal from "@/components/CheckoutModal";
 import SizeGuideModal from "@/components/SizeGuideModal";
 import LookbookModal from "@/components/LookbookModal";
+import AdminCMSModal from "@/components/AdminCMSModal";
+import StealthAdminListener from "@/components/StealthAdminListener";
 import Footer from "@/components/Footer";
 
 const geistSans = Geist({
@@ -49,16 +53,23 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <CustomizerProvider>
-          <Navbar />
-          <main className="app-main-content">{children}</main>
-          <CartDrawer />
-          <CheckoutModal />
-          <SizeGuideModal />
-          <LookbookModal />
-          <Footer />
-        </CustomizerProvider>
+        <AuthProvider>
+          <CMSProvider>
+            <CustomizerProvider>
+              <StealthAdminListener />
+              <Navbar />
+              <main className="app-main-content">{children}</main>
+              <CartDrawer />
+              <CheckoutModal />
+              <SizeGuideModal />
+              <LookbookModal />
+              <AdminCMSModal />
+              <Footer />
+            </CustomizerProvider>
+          </CMSProvider>
+        </AuthProvider>
       </body>
     </html>
   );
 }
+

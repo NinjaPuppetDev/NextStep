@@ -136,6 +136,37 @@ class SoundEngine {
       // Ignore
     }
   }
+
+  public playError() {
+    if (!this.enabled) return;
+    try {
+      this.initCtx();
+      if (!this.ctx) return;
+      const now = this.ctx.currentTime;
+      const notes = [300, 220, 160];
+
+      notes.forEach((freq, i) => {
+        if (!this.ctx) return;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const noteStart = now + i * 0.08;
+
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(freq, noteStart);
+
+        gain.gain.setValueAtTime(0.05, noteStart);
+        gain.gain.exponentialRampToValueAtTime(0.001, noteStart + 0.2);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(noteStart);
+        osc.stop(noteStart + 0.2);
+      });
+    } catch {
+      // Ignore
+    }
+  }
 }
 
 export const sound = new SoundEngine();

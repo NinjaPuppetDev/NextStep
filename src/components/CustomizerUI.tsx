@@ -30,18 +30,18 @@ import {
 import { sound } from "@/utils/audio";
 
 const FINISH_OPTIONS: { id: FinishType; label: string; desc: string; extra: number }[] = [
-  { id: "matte", label: "Matte Technical", desc: "Anti-glare micro-weave finish", extra: 0 },
-  { id: "gloss", label: "High-Gloss Patent", desc: "Ultra-reflective liquid coat", extra: 10 },
-  { id: "metallic", label: "Aerospace Titanium", desc: "Brushed metallic luster", extra: 15 },
-  { id: "luminescent", label: "Neon Luminescence", desc: "Self-illuminating photon glow", extra: 25 },
-  { id: "carbon", label: "Carbon Composite", desc: "High-tensile carbon weave", extra: 20 },
-  { id: "suede", label: "Tactile Suede", desc: "Micro-fiber velvet nap", extra: 15 },
+  { id: "matte", label: "Matte Finish", desc: "Clean, low-glare texture", extra: 0 },
+  { id: "gloss", label: "Gloss Finish", desc: "Smooth, reflective coat", extra: 10 },
+  { id: "metallic", label: "Metallic Lustre", desc: "Polished metallic sheen", extra: 15 },
+  { id: "luminescent", label: "Vivid Neon", desc: "Bright accent glow", extra: 25 },
+  { id: "carbon", label: "Carbon Weave", desc: "Durable textured composite", extra: 20 },
+  { id: "suede", label: "Soft Suede", desc: "Tactile micro-texture", extra: 15 },
 ];
 
 const LIGHTING_MODES: { id: LightingPreset; label: string; icon: string }[] = [
   { id: "studio", label: "Clean Studio", icon: "☀️" },
-  { id: "cyberpunk", label: "Cyber Neon", icon: "⚡" },
-  { id: "sunset", label: "Golden Dusk", icon: "🌅" },
+  { id: "cyberpunk", label: "Neon Accent", icon: "⚡" },
+  { id: "sunset", label: "Warm Dusk", icon: "🌅" },
   { id: "midnight", label: "Midnight Dark", icon: "🌑" },
 ];
 
@@ -169,15 +169,15 @@ export default function CustomizerUI() {
           <button
             className="icon-pill-btn highlight"
             onClick={triggerSnapshot}
-            title="Download 4K Rendering"
+            title="Download Rendering"
           >
             <Camera size={15} />
-            <span>Capture 4K</span>
+            <span>Capture Photo</span>
           </button>
 
           <button className="icon-pill-btn" onClick={handleShare} title="Share Custom Spec">
             {copiedLink ? <Check size={15} color="#39ff14" /> : <Share2 size={15} />}
-            <span>{copiedLink ? "Link Copied!" : "Share"}</span>
+            <span>{copiedLink ? "Link Copied!" : "Share Design"}</span>
           </button>
         </div>
       </div>
@@ -232,7 +232,7 @@ export default function CustomizerUI() {
         {activeTab === "parts" && (
           <div className="tab-content">
             <div className="section-title-row">
-              <span className="section-eyebrow">SELECT ANATOMY TO CUSTOMIZE</span>
+              <span className="section-eyebrow">SELECT COMPONENT TO CUSTOMIZE</span>
               <button className="text-link-btn" onClick={randomizeDesign}>
                 <Shuffle size={13} />
                 <span>Randomize</span>
@@ -328,7 +328,7 @@ export default function CustomizerUI() {
         {activeTab === "finishes" && (
           <div className="tab-content">
             <div className="section-title-row">
-              <span className="section-eyebrow">SURFACE FINISH & TEXTURE</span>
+              <span className="section-eyebrow">SURFACE FINISH & MATERIAL</span>
               <span className="target-part-badge">{PART_NAMES[activePart].label}</span>
             </div>
 
@@ -361,7 +361,7 @@ export default function CustomizerUI() {
             <div className="engraving-section">
               <span className="section-eyebrow">CUSTOM HEEL MONOGRAM (+ $15)</span>
               <p className="engraving-desc">
-                Laser-etch your initials or serial number into the rear stabilization bracket.
+                Add your initials or custom text to the heel tab.
               </p>
               <div className="engraving-input-wrap">
                 <input
@@ -369,7 +369,7 @@ export default function CustomizerUI() {
                   maxLength={8}
                   value={engraving}
                   onChange={(e) => setEngraving(e.target.value.toUpperCase())}
-                  placeholder="E.G. 'KINETIC' OR '007'"
+                  placeholder="E.G. 'STEP01'"
                   className="engraving-input"
                 />
                 <span className="char-count">{engraving.length}/8</span>
@@ -382,7 +382,7 @@ export default function CustomizerUI() {
         {activeTab === "presets" && (
           <div className="tab-content">
             <div className="section-title-row">
-              <span className="section-eyebrow">SIGNATURE ARCHIVE COLORWAYS</span>
+              <span className="section-eyebrow">SIGNATURE COLORWAYS</span>
             </div>
 
             <div className="presets-grid">
@@ -471,7 +471,7 @@ export default function CustomizerUI() {
 
             {/* 3D Model Silhouette Selector */}
             <div className="section-title-row">
-              <span className="section-eyebrow">ACTIVE 3D MESH SILHOUETTE</span>
+              <span className="section-eyebrow">ACTIVE 3D SILHOUETTE</span>
             </div>
 
             <div className="model-selector-grid">
@@ -483,10 +483,10 @@ export default function CustomizerUI() {
                 }}
               >
                 <div className="model-card-header">
-                  <span className="model-name">Shoe.obj Asset</span>
-                  <span className="brand-asset-badge">Original Asset</span>
+                  <span className="model-name">Base Model</span>
+                  <span className="brand-asset-badge">Original Model</span>
                 </div>
-                <p className="model-desc">Official 3D shoe object from your assets with multi-zone vertex shading.</p>
+                <p className="model-desc">Sculpted 3D shoe geometry with multi-zone color customization.</p>
               </button>
 
               <button
@@ -498,9 +498,9 @@ export default function CustomizerUI() {
               >
                 <div className="model-card-header">
                   <span className="model-name">Modular Sneaker</span>
-                  <span className="modular-badge">Multi-Mesh</span>
+                  <span className="modular-badge">Multi-Part</span>
                 </div>
-                <p className="model-desc">Anatomical 8-component performance sneaker geometry.</p>
+                <p className="model-desc">8-component performance sneaker geometry.</p>
               </button>
             </div>
 
@@ -510,7 +510,7 @@ export default function CustomizerUI() {
                 <span className="section-eyebrow">IMPORT CUSTOM 3D ASSET (.GLB / .GLTF)</span>
               </div>
               <p className="upload-desc">
-                Have your own 3D sneaker mesh? Upload any .glb file to inspect and render it inside the NextStep WebGL engine.
+                Have your own 3D sneaker mesh? Upload any .glb file to inspect and customize it inside NextStep.
               </p>
 
               <input
@@ -538,7 +538,7 @@ export default function CustomizerUI() {
                       setCustomModelUrl(null);
                     }}
                   >
-                    Reset to Default Kinesis Sneaker
+                    Reset to Default Model
                   </button>
                 )}
               </div>

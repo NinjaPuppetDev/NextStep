@@ -1,0 +1,49 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: Check if user is signed in with a verified email matching the site owner
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedOwner() {
+      return isSignedIn() &&
+        request.auth.token.email_verified == true &&
+        request.auth.token.email.lower() == 'raigoza.david.j@gmail.com';
+    }
+
+    // Default Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // CMS Media Slots: Public read for storefront display, owner-only mutation
+    match /cms_slots/{slotId} {
+      allow read: if true;
+      allow create, update, delete: if isVerifiedOwner();
+    }
+
+    match /media_slots/{slotId} {
+      allow read: if true;
+      allow create, update, delete: if isVerifiedOwner();
+    }
+
+    // CMS Media & 3D Assets: Public read for storefront assets, owner-only ingestion
+    match /cms_media_assets/{assetId} {
+      allow read: if true;
+      allow create, update, delete: if isVerifiedOwner();
+    }
+
+    match /3d_assets/{assetId} {
+      allow read: if true;
+      allow create, update, delete: if isVerifiedOwner();
+    }
+
+    // Connection testing endpoint for health checks
+    match /test/{testId} {
+      allow read: if true;
+      allow write: if isVerifiedOwner();
+    }
+  }
+}

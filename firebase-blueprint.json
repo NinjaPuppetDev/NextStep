@@ -1,0 +1,76 @@
+{
+  "entities": {
+    "cms_slots": {
+      "title": "CMS Slots",
+      "description": "Configured media slots for the website UI",
+      "fields": {
+        "slotId": {
+          "type": "string",
+          "description": "Unique key identifier for the slot (e.g. hero_shoe, edition_01, lookbook_01)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the slot"
+        },
+        "section": {
+          "type": "string",
+          "description": "Section of the site (hero, collection, lookbook, branding)"
+        },
+        "url": {
+          "type": "string",
+          "description": "Image data URI or public CDN URL"
+        },
+        "alt": {
+          "type": "string",
+          "description": "Alt description for the image"
+        },
+        "title": {
+          "type": "string",
+          "description": "Display title or label"
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Display subtitle or description"
+        },
+        "price": {
+          "type": "string",
+          "description": "Price string if applicable"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "ISO timestamp of last update"
+        }
+      }
+    },
+    "cms_media_assets": {
+      "title": "Media Assets Library",
+      "description": "Uploaded media library items",
+      "fields": {
+        "id": {
+          "type": "string",
+          "description": "Asset ID"
+        },
+        "name": {
+          "type": "string",
+          "description": "Original file name"
+        },
+        "url": {
+          "type": "string",
+          "description": "Image data URI or external URL"
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "File MIME type"
+        },
+        "sizeBytes": {
+          "type": "number",
+          "description": "File size in bytes"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation ISO timestamp"
+        }
+      }
+    }
+  }
+}

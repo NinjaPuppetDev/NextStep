@@ -21,12 +21,21 @@ import {
   PRESET_COLORWAYS,
   PresetColorway,
 } from "@/context/CustomizerContext";
+import { useCMS } from "@/context/CMSContext";
 import { sound } from "@/utils/audio";
 
 export default function HomePage() {
   const { applyPreset, setLookbookModalImg } = useCustomizer();
+  const { getSlot } = useCMS();
   const [selectedHeroPreset, setSelectedHeroPreset] = useState(PRESET_COLORWAYS[0]);
   const [activeTechTab, setActiveTechTab] = useState<"cushion" | "upper" | "plate" | "tread">("cushion");
+
+  const edition01 = getSlot("edition_01");
+  const edition02 = getSlot("edition_02");
+  const edition03 = getSlot("edition_03");
+  const lookbook01 = getSlot("lookbook_01");
+  const lookbook02 = getSlot("lookbook_02");
+  const lookbook03 = getSlot("lookbook_03");
 
   const handleHeroColorway = (preset: PresetColorway) => {
     sound.playSelect();
@@ -43,34 +52,33 @@ export default function HomePage() {
           <div className="hero-content">
             <div className="hero-badge">
               <span className="pulse-indicator" />
-              <span>DROP 01 // ON-DEMAND ADDITIVE MANUFACTURING</span>
+              <span>DROP 01 // ON-DEMAND DIGITAL MANUFACTURING</span>
             </div>
 
             <h1 className="hero-title">
-              ENGINEERED FOR THE <span className="highlight-word">UNBOUND</span>
+              3D PRINTED SHOES<br />
+              DESIGNED AROUND <span className="highlight-word">YOU</span>
             </h1>
 
             <p className="hero-description">
-              The next evolutionary leap in computational footwear. High-density
-              Aeroknit weave fused with nitrogen-infused additive lattice soles,
-              customized in real-time WebGL 3D.
+              Customizable 3D-printed footwear designed around your movement and manufactured on demand.
             </p>
 
             {/* Live Spec Metrics */}
             <div className="hero-metrics-bar">
               <div className="metric-item">
-                <span className="metric-val">280g</span>
-                <span className="metric-lbl">Ultralight Mass</span>
+                <span className="metric-val">Lightweight</span>
+                <span className="metric-lbl">Engineered Comfort</span>
               </div>
               <div className="metric-divider" />
               <div className="metric-item">
-                <span className="metric-val">84%</span>
-                <span className="metric-lbl">Kinetic Rebound</span>
+                <span className="metric-val">Customizable</span>
+                <span className="metric-lbl">Color, Material & Fit</span>
               </div>
               <div className="metric-divider" />
               <div className="metric-item">
-                <span className="metric-val">4.2 BAR</span>
-                <span className="metric-lbl">Hydro-Gel Core</span>
+                <span className="metric-val">3D Printed</span>
+                <span className="metric-lbl">Made on Demand</span>
               </div>
             </div>
 
@@ -102,15 +110,15 @@ export default function HomePage() {
                 onClick={() => sound.playSuccess()}
               >
                 <Sparkles size={18} />
-                <span>Launch 3D Customizer Studio</span>
+                <span>Customize yours</span>
                 <ArrowRight size={18} />
               </Link>
               <a
-                href="#lookbook"
+                href="#collection"
                 className="hero-secondary-btn"
                 onClick={() => sound.playClick(600, 0.02)}
               >
-                <span>Explore Lookbook</span>
+                <span>Explore Collection</span>
               </a>
             </div>
 
@@ -122,7 +130,7 @@ export default function HomePage() {
               </div>
               <div className="guarantee-chip">
                 <Zap size={14} color="#00f0ff" />
-                <span>Live Three.js Raycasting</span>
+                <span>Interactive 3D Preview</span>
               </div>
             </div>
           </div>
@@ -131,7 +139,7 @@ export default function HomePage() {
           <div className="hero-3d-viewport">
             <div className="canvas-header-indicator">
               <div className="indicator-dot" />
-              <span>LIVE 3D CAD VIEWPORT • ORBIT TO ROTATE</span>
+              <span>LIVE 3D VIEWPORT • DRAG TO ROTATE</span>
             </div>
 
             <div className="canvas-container-3d">
@@ -142,17 +150,17 @@ export default function HomePage() {
             <div className="spatial-chip chip-top-right">
               <div className="chip-header">
                 <Cpu size={13} color="#00f0ff" />
-                <span>AEROKNIT MATRIX</span>
+                <span>3D PRINTED STRUCTURE</span>
               </div>
-              <p>Multi-density carbon fiber micro-weave</p>
+              <p>Precision engineered lattice support</p>
             </div>
 
             <div className="spatial-chip chip-bottom-left">
               <div className="chip-header">
                 <Layers size={13} color="#39ff14" />
-                <span>NITROGEN CHASSIS</span>
+                <span>CUSTOM CUSHIONING</span>
               </div>
-              <p>Dynamic compression shock-absorbing sole</p>
+              <p>Designed around how you move</p>
             </div>
 
             {/* Quick customize direct link button */}
@@ -162,7 +170,7 @@ export default function HomePage() {
               onClick={() => sound.playSuccess()}
             >
               <Sliders size={14} />
-              <span>Open in Fullscreen 3D Atelier</span>
+              <span>Customize in 3D</span>
             </Link>
           </div>
         </div>
@@ -174,7 +182,7 @@ export default function HomePage() {
           <span className="section-eyebrow">ARCHIVE // DROP 01</span>
           <h2 className="section-title">SIGNATURE SILHOUETTES</h2>
           <p className="section-subtitle">
-            Engineered base silhouettes available for immediate dispatch or bespoke 3D recalibration.
+            Base silhouettes ready to wear or customize in 3D around your personal style and fit.
           </p>
         </div>
 
@@ -183,25 +191,27 @@ export default function HomePage() {
           <div className="lineup-card">
             <div className="card-badge">EDITION 01</div>
             <div className="card-image-wrap">
-              <Image
-                src="/images/shoe.jpg"
-                alt="Aether Kinetic Lime Runner"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={edition01.url}
+                alt={edition01.alt || "Edition 01 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
               />
             </div>
             <div className="card-info">
               <div className="card-header">
-                <h3>AETHER // CYBER VOLT</h3>
-                <span className="card-price">$245 USD</span>
+                <h3>{edition01.title || "CYBER // VOLT"}</h3>
+                <span className="card-price">{edition01.price || "$245 USD"}</span>
               </div>
               <p className="card-desc">
-                High-visibility electric lime perforated knit with organic Voronoi lattice midsole.
+                {edition01.subtitle || "Breathable knit upper with flexible 3D-printed lattice cushioning for responsive everyday comfort."}
               </p>
               <div className="card-spec-tags">
-                <span>Aeroknit Upper</span>
-                <span>Lattice Midsole</span>
+                <span>3D Printed Sole</span>
+                <span>Breathable Knit</span>
                 <span>US 7 - 13</span>
               </div>
               <Link
@@ -222,25 +232,27 @@ export default function HomePage() {
           <div className="lineup-card">
             <div className="card-badge">EDITION 02</div>
             <div className="card-image-wrap">
-              <Image
-                src="/images/stealthshoe.jpg"
-                alt="Aether Stealth Void"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={edition02.url}
+                alt={edition02.alt || "Edition 02 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
               />
             </div>
             <div className="card-info">
               <div className="card-header">
-                <h3>STEALTH // ONYX VOID</h3>
-                <span className="card-price">$230 USD</span>
+                <h3>{edition02.title || "STEALTH // ONYX"}</h3>
+                <span className="card-price">{edition02.price || "$230 USD"}</span>
               </div>
               <p className="card-desc">
-                Light-absorbing matte micro-weave with sculpted dark Voronoi shock dampeners.
+                {edition02.subtitle || "Clean monochromatic matte finish paired with targeted 3D-printed impact support."}
               </p>
               <div className="card-spec-tags">
-                <span>Matte Carbon</span>
-                <span>Nitrogen Sole</span>
+                <span>Matte Finish</span>
+                <span>Custom Cushion</span>
                 <span>US 7 - 13</span>
               </div>
               <Link
@@ -261,25 +273,27 @@ export default function HomePage() {
           <div className="lineup-card">
             <div className="card-badge">EDITION 03</div>
             <div className="card-image-wrap">
-              <Image
-                src="/images/whiteshoe.jpg"
-                alt="Aether Pure Glacier Runner"
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={edition03.url}
+                alt={edition03.alt || "Edition 03 Runner"}
                 width={500}
                 height={350}
                 className="lineup-img"
+                style={{ width: "100%", height: "100%", objectFit: "contain" }}
               />
             </div>
             <div className="card-info">
               <div className="card-header">
-                <h3>GLACIER // NEON CORE</h3>
-                <span className="card-price">$260 USD</span>
+                <h3>{edition03.title || "GLACIER // NEON"}</h3>
+                <span className="card-price">{edition03.price || "$260 USD"}</span>
               </div>
               <p className="card-desc">
-                Pure glacier white breathable upper with vivid neon lateral core accents.
+                {edition03.subtitle || "Crisp white upper accented with neon highlights and an adaptive lattice midsole."}
               </p>
               <div className="card-spec-tags">
-                <span>Glacier White</span>
-                <span>Cellular Mesh</span>
+                <span>Adaptive Lattice</span>
+                <span>Durable Weave</span>
                 <span>US 7 - 13</span>
               </div>
               <Link
@@ -302,10 +316,10 @@ export default function HomePage() {
       <section className="tech-section" id="technology">
         <div className="tech-container">
           <div className="tech-content">
-            <span className="section-eyebrow">AETHER MATERIALS LAB</span>
-            <h2 className="section-title">MOLECULAR ARCHITECTURE</h2>
+            <span className="section-eyebrow">MATERIALS & INNOVATION</span>
+            <h2 className="section-title">THE FUTURE IS PRINTED</h2>
             <p className="section-subtitle">
-              Every curve, lattice density, and weave tension is mathematically optimized for zero friction and maximum kinetic energy return.
+              We use advanced 3D printing and high-performance materials to develop footwear that adapts to your needs.
             </p>
 
             {/* Interactive Tech Tabs */}
@@ -317,7 +331,7 @@ export default function HomePage() {
                   setActiveTechTab("cushion");
                 }}
               >
-                1. Bio-Lattice Cushion
+                1. 3D Printed Structure
               </button>
               <button
                 className={`tech-pill ${activeTechTab === "upper" ? "active" : ""}`}
@@ -326,7 +340,7 @@ export default function HomePage() {
                   setActiveTechTab("upper");
                 }}
               >
-                2. Aeroknit Weave
+                2. Advanced Materials
               </button>
               <button
                 className={`tech-pill ${activeTechTab === "plate" ? "active" : ""}`}
@@ -335,7 +349,7 @@ export default function HomePage() {
                   setActiveTechTab("plate");
                 }}
               >
-                3. Carbon Kinetic Plate
+                3. Custom Fit
               </button>
               <button
                 className={`tech-pill ${activeTechTab === "tread" ? "active" : ""}`}
@@ -344,7 +358,7 @@ export default function HomePage() {
                   setActiveTechTab("tread");
                 }}
               >
-                4. Bio-Adaptive Tread
+                4. All-Surface Traction
               </button>
             </div>
 
@@ -352,22 +366,22 @@ export default function HomePage() {
             <div className="tech-tab-detail-card">
               {activeTechTab === "cushion" && (
                 <div>
-                  <h3 className="tab-card-title">Nitrogen-Infused Additive Matrix</h3>
+                  <h3 className="tab-card-title">3D Printed Structure</h3>
                   <p className="tab-card-desc">
-                    3D-printed with varying zonal density. Softer at the heel strike point to absorb 92% of ground impacts, transitioning into rigid high-rebound lattice under the forefoot.
+                    Precision-engineered lattice cushioning delivers targeted support and flexibility exactly where your foot needs it most.
                   </p>
                   <div className="tab-stats-row">
                     <div className="stat-box">
-                      <span className="stat-num">92%</span>
-                      <span className="stat-desc">Shock Dissipation</span>
+                      <span className="stat-num">Targeted</span>
+                      <span className="stat-desc">Lattice Support</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">1.2M</span>
-                      <span className="stat-desc">Lattice Cells</span>
+                      <span className="stat-num">Zero</span>
+                      <span className="stat-desc">Excess Waste</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">0%</span>
-                      <span className="stat-desc">Material Waste</span>
+                      <span className="stat-num">Adaptive</span>
+                      <span className="stat-desc">Cushioning</span>
                     </div>
                   </div>
                 </div>
@@ -375,22 +389,22 @@ export default function HomePage() {
 
               {activeTechTab === "upper" && (
                 <div>
-                  <h3 className="tab-card-title">Seamless Aeroknit Weave</h3>
+                  <h3 className="tab-card-title">Advanced Materials</h3>
                   <p className="tab-card-desc">
-                    Engineered from single-filament recycled polymer fibers. Micro-ventilation zones provide maximum airflow while directional ribbing locks down the midfoot.
+                    Flexible, durable polymers and breathable engineered knits designed for long-lasting everyday comfort.
                   </p>
                   <div className="tab-stats-row">
                     <div className="stat-box">
-                      <span className="stat-num">98%</span>
-                      <span className="stat-desc">Breathability Score</span>
+                      <span className="stat-num">Durable</span>
+                      <span className="stat-desc">High-Grade Polymers</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">420 MPa</span>
-                      <span className="stat-desc">Tensile Strength</span>
+                      <span className="stat-num">Breathable</span>
+                      <span className="stat-desc">Engineered Weave</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">Zero</span>
-                      <span className="stat-desc">Pressure Hotspots</span>
+                      <span className="stat-num">Comfort</span>
+                      <span className="stat-desc">All-Day Wear</span>
                     </div>
                   </div>
                 </div>
@@ -398,22 +412,22 @@ export default function HomePage() {
 
               {activeTechTab === "plate" && (
                 <div>
-                  <h3 className="tab-card-title">3K Aerospace Carbon Fiber Shank</h3>
+                  <h3 className="tab-card-title">Custom Fit & Design</h3>
                   <p className="tab-card-desc">
-                    Sandwiched between dual-density foam layers, the spoon-shaped carbon propulsion plate acts like a catapult, returning 84% of your stride energy into forward momentum.
+                    A digital design process built around the wearer, allowing seamless personal customization from color to materials.
                   </p>
                   <div className="tab-stats-row">
                     <div className="stat-box">
-                      <span className="stat-num">84%</span>
-                      <span className="stat-desc">Propulsion Return</span>
+                      <span className="stat-num">Personalized</span>
+                      <span className="stat-desc">Color & Finish</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">18g</span>
-                      <span className="stat-desc">Plate Mass</span>
+                      <span className="stat-num">Digital</span>
+                      <span className="stat-desc">Manufacturing</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">3K</span>
-                      <span className="stat-desc">Carbon Tow</span>
+                      <span className="stat-num">Made for You</span>
+                      <span className="stat-desc">On-Demand</span>
                     </div>
                   </div>
                 </div>
@@ -421,22 +435,22 @@ export default function HomePage() {
 
               {activeTechTab === "tread" && (
                 <div>
-                  <h3 className="tab-card-title">Bio-Adaptive Traction Pattern</h3>
+                  <h3 className="tab-card-title">All-Surface Traction</h3>
                   <p className="tab-card-desc">
-                    Inspired by gecko lamellae micro-structures. Multi-directional geometric lugs grip wet asphalt, polished concrete, and uneven terrain without retaining pebbles.
+                    Multi-directional tread geometry designed for steady grip across urban sidewalks and varied surfaces.
                   </p>
                   <div className="tab-stats-row">
                     <div className="stat-box">
-                      <span className="stat-num">1.4µ</span>
-                      <span className="stat-desc">Wet Friction Coeff</span>
-                    </div>
-                    <div className="stat-box">
                       <span className="stat-num">360°</span>
-                      <span className="stat-desc">Lateral Stability</span>
+                      <span className="stat-desc">Grip & Stability</span>
                     </div>
                     <div className="stat-box">
-                      <span className="stat-num">1,000 km</span>
-                      <span className="stat-desc">Tested Durability</span>
+                      <span className="stat-num">Durable</span>
+                      <span className="stat-desc">Rubber Compound</span>
+                    </div>
+                    <div className="stat-box">
+                      <span className="stat-num">Flexible</span>
+                      <span className="stat-desc">Natural Stride</span>
                     </div>
                   </div>
                 </div>
@@ -449,14 +463,14 @@ export default function HomePage() {
             <div className="tech-image-frame">
               <Image
                 src="/images/ShoeMaterials.png"
-                alt="Aether High-Performance Shoe Materials"
+                alt="NextStep High-Performance Shoe Materials"
                 width={700}
                 height={400}
                 className="tech-material-img"
               />
               <div className="tech-overlay-tag">
                 <Sparkles size={14} color="#39ff14" />
-                <span>LAB SAMPLE SPEC: 08-2026</span>
+                <span>DIGITAL FABRICATION LAB</span>
               </div>
             </div>
           </div>
@@ -467,9 +481,9 @@ export default function HomePage() {
       <section className="lookbook-section" id="lookbook">
         <div className="section-header-centered">
           <span className="section-eyebrow">CAMPAIGN 2026</span>
-          <h2 className="section-title">EDITORIAL LOOKBOOK</h2>
+          <h2 className="section-title">MADE FOR EVERY MOVE</h2>
           <p className="section-subtitle">
-            Captured on the streets of Neo-Tokyo and Berlin. High-fashion architectural aesthetics meeting brutalist performance.
+            Built for life in motion. Designed for everyday comfort, movement, and personal expression.
           </p>
         </div>
 
@@ -479,22 +493,24 @@ export default function HomePage() {
             className="gallery-item large"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg("/images/LookbookWide.jpg");
+              setLookbookModalImg(lookbook01.url);
             }}
           >
-            <Image
-              src="/images/LookbookWide.jpg"
-              alt="Urban Lifestyle Waterfront Shoot"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={lookbook01.url}
+              alt={lookbook01.alt || "Lookbook 01 Shoot"}
               width={900}
               height={600}
               className="gallery-img"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
-                <span className="gallery-tag">LOOKBOOK 01 // URBAN PROMENADE</span>
-                <h3>Kinetic Lifestyle</h3>
+                <span className="gallery-tag">{lookbook01.subtitle || "LOOKBOOK 01 // EVERYDAY MOTION"}</span>
+                <h3>{lookbook01.title || "Street & Urban Flow"}</h3>
                 <span className="view-link">
-                  <Eye size={15} /> Click to Inspect in High-Res
+                  <Eye size={15} /> Click to View High-Res
                 </span>
               </div>
               <Maximize2 size={18} className="expand-icon" />
@@ -506,20 +522,22 @@ export default function HomePage() {
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg("/images/LookbookAthlete.jpg");
+              setLookbookModalImg(lookbook02.url);
             }}
           >
-            <Image
-              src="/images/LookbookAthlete.jpg"
-              alt="Athlete Park Trail Run"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={lookbook02.url}
+              alt={lookbook02.alt || "Lookbook 02 Shoot"}
               width={600}
               height={800}
               className="gallery-img"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
-                <span className="gallery-tag">LOOKBOOK 02 // TRAIL VELOCITY</span>
-                <h3>Endurance Sprint</h3>
+                <span className="gallery-tag">{lookbook02.subtitle || "LOOKBOOK 02 // ACTIVE MOVEMENT"}</span>
+                <h3>{lookbook02.title || "Outdoor & Trail Pace"}</h3>
                 <span className="view-link">
                   <Eye size={15} /> View High-Res
                 </span>
@@ -533,20 +551,22 @@ export default function HomePage() {
             className="gallery-item"
             onClick={() => {
               sound.playSelect();
-              setLookbookModalImg("/images/LookbookStride.jpg");
+              setLookbookModalImg(lookbook03.url);
             }}
           >
-            <Image
-              src="/images/LookbookStride.jpg"
-              alt="Stride Impact Close-Up"
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={lookbook03.url}
+              alt={lookbook03.alt || "Lookbook 03 Shoot"}
               width={600}
               height={800}
               className="gallery-img"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
             <div className="gallery-hover-overlay">
               <div className="hover-content">
-                <span className="gallery-tag">LOOKBOOK 03 // STRIDE IMPACT</span>
-                <h3>Cellular Cushioning</h3>
+                <span className="gallery-tag">{lookbook03.subtitle || "LOOKBOOK 03 // DETAIL & CRAFT"}</span>
+                <h3>{lookbook03.title || "Precision Lattice Structure"}</h3>
                 <span className="view-link">
                   <Eye size={15} /> View High-Res
                 </span>
@@ -562,31 +582,31 @@ export default function HomePage() {
         <div className="atelier-spotlight-container">
           <div className="atelier-badge">
             <Sparkles size={16} color="#39ff14" />
-            <span>REAL-TIME 3D ATELIER</span>
+            <span>3D CUSTOMIZATION STUDIO</span>
           </div>
           <h2 className="atelier-headline">
-            YOU ARE THE HEAD DESIGNER. <br />
-            EVERY COMPONENT IS YOUR CANVAS.
+            CUSTOMIZE YOUR PAIR.<br />
+            MAKE IT YOURS.
           </h2>
           <p className="atelier-sub">
-            Choose from 8 distinct anatomical shoe zones, 16 curated designer colorways, 6 tactile material shaders (including Neon Luminescence and Carbon Weave), and custom heel monograms.
+            Personalize your shoe from upper to sole. Choose from curated colorways, rich textures, and custom details with real-time 3D controls.
           </p>
 
           <div className="atelier-feature-grid">
             <div className="atelier-card">
               <div className="feature-num">01</div>
-              <h4>Direct 3D Raycasting</h4>
-              <p>Click directly on the shoe upper, sole, or laces in the 3D viewport to select and recolor instantly.</p>
+              <h4>Color</h4>
+              <p>Personalize every section from the upper and sole to the laces and accents.</p>
             </div>
             <div className="atelier-card">
               <div className="feature-num">02</div>
-              <h4>Physics-Based Shaders</h4>
-              <p>Experience real-time clearcoat reflections, metallic glints, and neon emission in 4 studio lighting rigs.</p>
+              <h4>Material</h4>
+              <p>Select finishes ranging from matte and gloss to durable composites and tactile suede.</p>
             </div>
             <div className="atelier-card">
               <div className="feature-num">03</div>
-              <h4>4K Render & Share</h4>
-              <p>Export high-resolution photographic snapshots and share encoded design links with friends.</p>
+              <h4>Fit & Detail</h4>
+              <p>Choose your size, add a custom heel monogram, and preview your pair from every angle.</p>
             </div>
           </div>
 
@@ -596,40 +616,40 @@ export default function HomePage() {
               className="atelier-big-btn"
               onClick={() => sound.playSuccess()}
             >
-              <span>Launch 3D Customizer Studio</span>
+              <span>Customize in 3D</span>
               <ArrowRight size={20} />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 6. BRAND MANIFESTO */}
+      {/* 6. BRAND MANIFESTO & PHILOSOPHY */}
       <section className="manifesto-section" id="manifesto">
         <div className="manifesto-container">
           <span className="section-eyebrow">OUR PHILOSOPHY</span>
           <h2 className="manifesto-quote">
-            &ldquo;MASS PRODUCTION IS OBSOLETE. TRUE LUXURY IS ZERO WASTE, BESPOKE FIT, AND INFINITE COMPUTATIONAL CREATIVITY.&rdquo;
+            &ldquo;FOOTWEAR DESIGNED AROUND THE WEARER, MADE ON DEMAND WITH ZERO EXCESS INVENTORY.&rdquo;
           </h2>
           <div className="manifesto-pillars">
             <div className="pillar-item">
               <CheckCircle size={18} color="#39ff14" />
               <div>
                 <h5>On-Demand Fabrication</h5>
-                <p>Shoes are only 3D-printed and assembled once an order is locked. Zero dead inventory.</p>
+                <p>Shoes are produced once an order is placed, reducing the need for excess inventory.</p>
               </div>
             </div>
             <div className="pillar-item">
               <CheckCircle size={18} color="#39ff14" />
               <div>
-                <h5>Recyclable Bio-Polymers</h5>
-                <p>Every pair can be disassembled and remelted into fresh filament at end-of-life.</p>
+                <h5>Recyclable Materials</h5>
+                <p>Designed with high-performance polymers and material recovery in mind.</p>
               </div>
             </div>
             <div className="pillar-item">
               <CheckCircle size={18} color="#39ff14" />
               <div>
-                <h5>Precision Anatomy</h5>
-                <p>Optimized for natural foot biomechanics, distributing ground forces across 1.2M micro-struts.</p>
+                <h5>Precision Design</h5>
+                <p>Digital manufacturing allows the geometry of the product to be adjusted and refined at a granular level for comfort and support.</p>
               </div>
             </div>
           </div>

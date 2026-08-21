@@ -40,7 +40,7 @@ export default function SizeGuideModal() {
         <div className="modal-header">
           <div className="modal-title-wrap">
             <Ruler size={18} color="#39ff14" />
-            <h3>Precision Footwear Sizing Matrix</h3>
+            <h3>Size Guide</h3>
           </div>
           <button
             className="modal-close-btn"

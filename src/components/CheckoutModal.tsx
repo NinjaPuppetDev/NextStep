@@ -65,9 +65,9 @@ export default function CheckoutModal() {
         {step === "form" ? (
           <div className="checkout-form-body">
             <div className="checkout-header">
-              <span className="checkout-badge">AETHER SECURE CHECKOUT</span>
-              <h2>Instant Bespoke Order</h2>
-              <p>Your custom 3D sneaker specs will be queued into our automated additive manufacturing lab.</p>
+              <span className="checkout-badge">NEXTSTEP SECURE CHECKOUT</span>
+              <h2>Complete Your Order</h2>
+              <p>Your custom 3D footwear specification is ready for production.</p>
             </div>
 
             <form onSubmit={handlePay} className="checkout-form">
@@ -156,10 +156,10 @@ export default function CheckoutModal() {
 
               <button type="submit" disabled={loading} className="pay-submit-btn">
                 {loading ? (
-                  <span>Transmitting 3D Specs...</span>
+                  <span>Processing Order...</span>
                 ) : (
                   <>
-                    <span>Confirm & Authorize ${cartTotal} USD</span>
+                    <span>Confirm Order • ${cartTotal} USD</span>
                     <ArrowRight size={17} />
                   </>
                 )}
@@ -171,10 +171,10 @@ export default function CheckoutModal() {
             <div className="confirmed-icon-wrap">
               <CheckCircle2 size={54} color="#39ff14" />
             </div>
-            <span className="order-status-tag">ORDER CONFIRMED & QUEUED</span>
+            <span className="order-status-tag">ORDER CONFIRMED</span>
             <h2>Thank You For Your Order</h2>
             <p className="order-msg">
-              Your bespoke 3D CAD profile has been compiled and sent to the additive manufacturing cleanroom.
+              Your custom shoe specification has been received and queued for 3D printing and assembly.
             </p>
 
             <div className="order-receipt-card">
@@ -187,11 +187,11 @@ export default function CheckoutModal() {
                 <span className="receipt-val">3-5 Business Days</span>
               </div>
               <div className="receipt-line">
-                <span className="receipt-label">Delivery Courier:</span>
-                <span className="receipt-val">DHL Carbon-Neutral Express</span>
+                <span className="receipt-label">Delivery Service:</span>
+                <span className="receipt-val">Express Carbon-Neutral Delivery</span>
               </div>
               <div className="receipt-line">
-                <span className="receipt-label">Tracking Notifications:</span>
+                <span className="receipt-label">Confirmation Sent To:</span>
                 <span className="receipt-val">{formData.email}</span>
               </div>
             </div>
@@ -199,25 +199,25 @@ export default function CheckoutModal() {
             <div className="production-timeline">
               <div className="timeline-step active">
                 <div className="step-dot" />
-                <span>3D Spec Synthesis</span>
+                <span>Order Queued</span>
               </div>
               <div className="timeline-step">
                 <div className="step-dot" />
-                <span>Additive Sole 3D Print</span>
+                <span>3D Printing Midsole</span>
               </div>
               <div className="timeline-step">
                 <div className="step-dot" />
-                <span>Aeroknit Assembly</span>
+                <span>Knit Assembly</span>
               </div>
               <div className="timeline-step">
                 <div className="step-dot" />
-                <span>Laser QC & Delivery</span>
+                <span>Quality Check & Ship</span>
               </div>
             </div>
 
             <button className="return-store-btn" onClick={handleClose}>
               <Package size={16} />
-              <span>Back to Customizer Studio</span>
+              <span>Back to Customizer</span>
             </button>
           </div>
         )}
