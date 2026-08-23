@@ -62,8 +62,7 @@ export default function HomePage() {
             </div>
 
             <h1 className="hero-title">
-              3D PRINTED SHOES<br />
-              DESIGNED AROUND <span className="highlight-word">YOU</span>
+              3D PRINTED SHOES DESIGNED <span className="whitespace-nowrap">AROUND <span className="highlight-word">YOU</span></span>
             </h1>
 
             <p className="hero-description">
