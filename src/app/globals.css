@@ -429,9 +429,9 @@ input, select, textarea {
 }
 
 .hero-title {
-  font-size: clamp(2.4rem, 4.5vw, 3.2rem);
+  font-size: clamp(2rem, 3.1vw, 2.7rem); /* Max font-size reduced so line 2 fits without wrapping */
   font-weight: 900;
-  line-height: 1.04;
+  line-height: 1.08;
   letter-spacing: -0.03em;
   color: #fff;
   text-transform: uppercase;

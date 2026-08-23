@@ -62,9 +62,12 @@ export default function HomePage() {
             </div>
 
             <h1 className="hero-title">
-              3D PRINTED SHOES DESIGNED <span className="whitespace-nowrap">AROUND <span className="highlight-word">YOU</span></span>
+              3D PRINTED SHOES<br />
+              <span style={{ whiteSpace: "nowrap" }}>
+                DESIGNED AROUND <span className="highlight-word">YOU</span>
+              </span>
             </h1>
-
+            
             <p className="hero-description">
               Customizable 3D-printed footwear designed around your movement and manufactured on demand.
             </p>
